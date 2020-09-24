@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "972613918388",
+    "firebase_url": "https://zadatko.firebaseio.com",
+    "project_id": "zadatko",
+    "storage_bucket": "zadatko.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972613918388:android:21f9ba89546b82862581e1",
+        "android_client_info": {
+          "package_name": "com.josipkilic.zadatko"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972613918388-p63eia4ng9pko304l7c1unj3mv49o648.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXc3EZoe_cxb1_1-wKQB4umkm-0nrO0I4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972613918388-p63eia4ng9pko304l7c1unj3mv49o648.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
