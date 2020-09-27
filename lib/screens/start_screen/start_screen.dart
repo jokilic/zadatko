@@ -1,34 +1,83 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:zadatko/constants.dart';
-import 'package:zadatko/screens/start_screen/components/start_text_field.dart';
 
-import 'components/start_button.dart';
+import '../../constants.dart';
+import '../../models/auth.dart';
+import './components/start_fields.dart';
+import './components/build_start_buttons.dart';
+import '../../components/hero_section.dart';
 
-enum StartState {
+enum StartFieldsState {
   start,
   login,
   signup,
 }
 
+StartFieldsState startFieldsState = StartFieldsState.start;
+String loginErrorText = '';
+String signupErrorText = '';
+
 class StartScreen extends StatefulWidget {
-  static const routeName = '/login-screen';
+  static const routeName = '/start-screen';
 
   @override
   _StartScreenState createState() => _StartScreenState();
 }
 
 class _StartScreenState extends State<StartScreen> {
-  StartState startState = StartState.start;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
+  // Get an illustration to show on the StartScreen
   String get getRandomIllustration =>
       illustrations[Random().nextInt(illustrations.length)];
 
-  void changeStartScreenState(StartState newStartState) {
+  // Used for Login errors
+  void generateLoginErrorText() {
+    switch (loginState) {
+      case LoginState.userNotFound:
+        loginErrorText = loginUserNotFoundString;
+        break;
+      case LoginState.wrongPassword:
+        loginErrorText = loginWrongPasswordString;
+        break;
+      case LoginState.generalError:
+        loginErrorText = generalErrorString;
+        break;
+      case LoginState.loggedIn:
+        loginErrorText = '';
+        break;
+      default:
+        loginErrorText = '';
+    }
+    setState(() {});
+  }
+
+  void generateSignupErrorText() {
+    switch (signupState) {
+      case SignupState.accountExists:
+        signupErrorText = signupAccountExistsString;
+        break;
+      case SignupState.weakPassword:
+        signupErrorText = signupWeakPasswordString;
+        break;
+      case SignupState.generalError:
+        signupErrorText = generalErrorString;
+        break;
+      case SignupState.signedUp:
+        signupErrorText = '';
+        break;
+      default:
+        signupErrorText = '';
+    }
+    setState(() {});
+  }
+
+  // Change the StartFieldsState enum
+  void changeStartScreenState(StartFieldsState newStartFieldsState) {
     setState(() {
-      startState = newStartState;
+      startFieldsState = newStartFieldsState;
     });
   }
 
@@ -40,97 +89,75 @@ class _StartScreenState extends State<StartScreen> {
       backgroundColor: darkColor,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Container(
             width: size.width,
             child: Column(
               children: [
                 SizedBox(height: 56.0),
-                Column(
-                  children: [
-                    Text(
-                      welcomeString,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1
-                          .copyWith(fontSize: 28.0),
-                    ),
-                    Text(
-                      appName,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline1,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 36.0),
+                HeroSection(),
+                SizedBox(height: 56.0),
                 SvgPicture.asset(
                   getRandomIllustration,
                   width: size.width * 0.9,
                 ),
                 SizedBox(height: 36.0),
-                if (startState == StartState.start)
+                if (startFieldsState == StartFieldsState.start)
+                  // Show Login & Signup Buttons
                   buildStartButtons(
-                    loginOnTap: () => changeStartScreenState(StartState.login),
+                    context: context,
+                    loginOnTap: () =>
+                        changeStartScreenState(StartFieldsState.login),
                     signupOnTap: () =>
-                        changeStartScreenState(StartState.signup),
+                        changeStartScreenState(StartFieldsState.signup),
                   ),
-                if (startState == StartState.login) buildLoginFields(context),
-
-                // TODO: Create fields for Signup and make an if statement to show it here.
+                if (startFieldsState == StartFieldsState.login)
+                  // Show Login fields
+                  StartFields(
+                    titleText: loginTitle,
+                    buttonText: loginString.toUpperCase(),
+                    bottomText: signupString,
+                    errorText: loginErrorText,
+                    emailController: emailController,
+                    passwordController: passwordController,
+                    buttonCallback: () async {
+                      // TODO: Make some Loading indicator while waiting
+                      await Auth().loginFirebase(
+                        emailController.text,
+                        passwordController.text,
+                      );
+                      generateLoginErrorText();
+                    },
+                    bottomTextCallback: () =>
+                        // TODO: Clear fields & Error text
+                        changeStartScreenState(StartFieldsState.signup),
+                  ),
+                if (startFieldsState == StartFieldsState.signup)
+                  // Show Signup Buttons
+                  StartFields(
+                    titleText: signupTitle,
+                    buttonText: signupString.toUpperCase(),
+                    bottomText: loginString,
+                    errorText: signupErrorText,
+                    emailController: emailController,
+                    passwordController: passwordController,
+                    buttonCallback: () async {
+                      // TODO: Make some Loading indicator while waiting
+                      await Auth().signupFirebase(
+                        emailController.text,
+                        passwordController.text,
+                      );
+                      generateSignupErrorText();
+                    },
+                    bottomTextCallback: () =>
+                        // TODO: Clear fields & Error text
+                        changeStartScreenState(StartFieldsState.login),
+                  ),
+                SizedBox(height: 100.0),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget buildLoginFields(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 36.0),
-      child: Column(
-        children: [
-          Text(
-            'Enter your email & password',
-            textAlign: TextAlign.center,
-            style:
-                Theme.of(context).textTheme.headline1.copyWith(fontSize: 24.0),
-          ),
-          SizedBox(height: 24.0),
-          StartTextField(
-            hintText: emailHintText,
-            onChanged: (value) => null,
-          ),
-          SizedBox(height: 24.0),
-          StartTextField(
-            hintText: passwordHintText,
-            isObscureText: true,
-            onChanged: (value) => null,
-          ),
-          SizedBox(height: 100.0),
-        ],
-      ),
-    );
-  }
-
-  Widget buildStartButtons(
-      {@required Function loginOnTap, @required Function signupOnTap}) {
-    return Container(
-      child: Column(
-        children: [
-          SizedBox(height: 32.0),
-          StartButton(
-            text: loginString.toUpperCase(),
-            onTap: loginOnTap,
-            color: blueColor,
-          ),
-          SizedBox(height: 32.0),
-          StartButton(
-            text: signupString.toUpperCase(),
-            onTap: signupOnTap,
-            color: redColor,
-          ),
-        ],
       ),
     );
   }

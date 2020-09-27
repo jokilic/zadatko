@@ -31,12 +31,28 @@ const List<String> illustrations = [
   yogaIllustration,
 ];
 
+// Error Strings
+const String loginUserNotFoundString = 'Usero not foundo.';
+const String loginWrongPasswordString = 'Passwordo is wrongo.';
+const String signupAccountExistsString = 'Accounto already existando.';
+const String signupWeakPasswordString = 'Passwordo not strongo enough.';
+const String signupGeneralErrorString = 'Accounto already existando.';
+const String generalErrorString = 'Erroro has happendo.';
+
 // Start Screen
 const String welcomeString = 'Welcome to';
 const String loginString = 'Login';
 const String signupString = 'Signup';
 const String emailHintText = 'E-Mail';
 const String passwordHintText = 'Password';
+const String loginTitle = 'Login with existing credentials';
+const String signupTitle = 'Create a new account below';
+const String bottomTextFirstString = 'You can ';
+const String bottomTextSecondString = ' instead.';
+
+// Tasks Screen
+const String connectedString = 'You are logindo!\n\n🥳';
+const String errorString = 'Erroro has happendo!\n\n🥺';
 
 // Main.dart
 ThemeData theme() {

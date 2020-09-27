@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
 
-class StartButton extends StatelessWidget {
+import '../constants.dart';
+
+// Standardized button used across the app
+class ZadatkoButton extends StatelessWidget {
   final String text;
   final Function onTap;
-  final Color color;
 
-  StartButton({
+  ZadatkoButton({
     @required this.text,
     @required this.onTap,
-    @required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return FlatButton(
       padding: EdgeInsets.symmetric(
-        horizontal: 28.0,
-        vertical: 16.0,
+        horizontal: 36.0,
+        vertical: 20.0,
       ),
       child: Text(
         text,
         style: Theme.of(context).textTheme.button,
       ),
       onPressed: onTap,
-      color: color,
+      // color: color,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
+        side: BorderSide(
+          color: lightColor,
+          width: 3,
+        ),
       ),
     );
   }

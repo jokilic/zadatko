@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import '../constants.dart';
 
-class StartTextField extends StatelessWidget {
-  final Function onChanged;
+// Standardized TextField used across the app
+// TODO: Potentially make the TextField nicer looking
+// TODO: Create FocusNodes
+class ZadatkoTextField extends StatelessWidget {
   final String hintText;
   final bool isObscureText;
+  final TextEditingController textEditingController;
 
-  StartTextField({
-    @required this.onChanged,
+  ZadatkoTextField({
     @required this.hintText,
     this.isObscureText = false,
+    @required this.textEditingController,
   });
 
   @override
@@ -22,7 +25,7 @@ class StartTextField extends StatelessWidget {
       child: Column(
         children: [
           TextField(
-            onChanged: onChanged,
+            controller: textEditingController,
             obscureText: isObscureText,
             textAlign: TextAlign.center,
             style: TextStyle(
