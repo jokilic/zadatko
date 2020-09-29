@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 // Standardized TextField used across the app
-// TODO: Potentially make the TextField nicer looking
-// TODO: Create FocusNodes
 class ZadatkoTextField extends StatelessWidget {
   final String hintText;
   final bool isObscureText;
   final TextEditingController textEditingController;
+  final FocusNode focusNode;
+  final Function onEditingComplete;
 
   ZadatkoTextField({
     @required this.hintText,
     this.isObscureText = false,
     @required this.textEditingController,
+    @required this.focusNode,
+    @required this.onEditingComplete,
   });
 
   @override
@@ -27,6 +29,8 @@ class ZadatkoTextField extends StatelessWidget {
           TextField(
             controller: textEditingController,
             obscureText: isObscureText,
+            focusNode: focusNode,
+            onEditingComplete: onEditingComplete,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: lightColor,

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../constants.dart';
 import '../../models/auth.dart';
+import '../../models/validation.dart';
 import './components/start_fields.dart';
 import './components/build_start_buttons.dart';
 import '../../components/hero_section.dart';
@@ -14,6 +15,7 @@ enum StartFieldsState {
   signup,
 }
 
+bool isLoading = false;
 StartFieldsState startFieldsState = StartFieldsState.start;
 String loginErrorText = '';
 String signupErrorText = '';
@@ -26,6 +28,8 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
+  FocusNode emailFocusNode = FocusNode();
+  FocusNode passwordFocusNode = FocusNode();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -38,6 +42,9 @@ class _StartScreenState extends State<StartScreen> {
     switch (loginState) {
       case LoginState.userNotFound:
         loginErrorText = loginUserNotFoundString;
+        break;
+      case LoginState.wrongEmail:
+        loginErrorText = wrongEmailString;
         break;
       case LoginState.wrongPassword:
         loginErrorText = loginWrongPasswordString;
@@ -59,6 +66,9 @@ class _StartScreenState extends State<StartScreen> {
       case SignupState.accountExists:
         signupErrorText = signupAccountExistsString;
         break;
+      case SignupState.wrongEmail:
+        signupErrorText = wrongEmailString;
+        break;
       case SignupState.weakPassword:
         signupErrorText = signupWeakPasswordString;
         break;
@@ -74,11 +84,48 @@ class _StartScreenState extends State<StartScreen> {
     setState(() {});
   }
 
+  void clearFields() {
+    emailController.clear();
+    passwordController.clear();
+    loginErrorText = '';
+    signupErrorText = '';
+  }
+
   // Change the StartFieldsState enum
   void changeStartScreenState(StartFieldsState newStartFieldsState) {
     setState(() {
       startFieldsState = newStartFieldsState;
     });
+  }
+
+  Future<void> login() async {
+    FocusScope.of(context).unfocus();
+    setState(() {});
+    isLoading = true;
+    Validation().validateEmail(emailController.text)
+        ? await Auth().loginFirebase(
+            emailController.text,
+            passwordController.text,
+          )
+        : loginState = LoginState.wrongEmail;
+
+    generateLoginErrorText();
+    isLoading = false;
+  }
+
+  Future<void> signup() async {
+    FocusScope.of(context).unfocus();
+    setState(() {});
+    isLoading = true;
+    Validation().validateEmail(emailController.text)
+        ? await Auth().signupFirebase(
+            emailController.text,
+            passwordController.text,
+          )
+        : signupState = SignupState.wrongEmail;
+
+    generateSignupErrorText();
+    isLoading = false;
   }
 
   @override
@@ -114,45 +161,43 @@ class _StartScreenState extends State<StartScreen> {
                 if (startFieldsState == StartFieldsState.login)
                   // Show Login fields
                   StartFields(
-                    titleText: loginTitle,
-                    buttonText: loginString.toUpperCase(),
-                    bottomText: signupString,
-                    errorText: loginErrorText,
-                    emailController: emailController,
-                    passwordController: passwordController,
-                    buttonCallback: () async {
-                      // TODO: Make some Loading indicator while waiting
-                      await Auth().loginFirebase(
-                        emailController.text,
-                        passwordController.text,
-                      );
-                      generateLoginErrorText();
-                    },
-                    bottomTextCallback: () =>
-                        // TODO: Clear fields & Error text
-                        changeStartScreenState(StartFieldsState.signup),
-                  ),
+                      titleText: loginTitle,
+                      buttonText: loginString.toUpperCase(),
+                      bottomText: signupString,
+                      errorText: loginErrorText,
+                      isLoading: isLoading,
+                      emailFocusNode: emailFocusNode,
+                      passwordFocusNode: passwordFocusNode,
+                      emailOnEditingComplete: () => FocusScope.of(context)
+                          .requestFocus(passwordFocusNode),
+                      passwordOnEditingComplete: () => login(),
+                      emailController: emailController,
+                      passwordController: passwordController,
+                      buttonCallback: () => login(),
+                      bottomTextCallback: () {
+                        clearFields();
+                        changeStartScreenState(StartFieldsState.signup);
+                      }),
                 if (startFieldsState == StartFieldsState.signup)
                   // Show Signup Buttons
                   StartFields(
-                    titleText: signupTitle,
-                    buttonText: signupString.toUpperCase(),
-                    bottomText: loginString,
-                    errorText: signupErrorText,
-                    emailController: emailController,
-                    passwordController: passwordController,
-                    buttonCallback: () async {
-                      // TODO: Make some Loading indicator while waiting
-                      await Auth().signupFirebase(
-                        emailController.text,
-                        passwordController.text,
-                      );
-                      generateSignupErrorText();
-                    },
-                    bottomTextCallback: () =>
-                        // TODO: Clear fields & Error text
-                        changeStartScreenState(StartFieldsState.login),
-                  ),
+                      titleText: signupTitle,
+                      buttonText: signupString.toUpperCase(),
+                      bottomText: loginString,
+                      errorText: signupErrorText,
+                      isLoading: isLoading,
+                      emailFocusNode: emailFocusNode,
+                      passwordFocusNode: passwordFocusNode,
+                      emailOnEditingComplete: () => FocusScope.of(context)
+                          .requestFocus(passwordFocusNode),
+                      passwordOnEditingComplete: () => signup(),
+                      emailController: emailController,
+                      passwordController: passwordController,
+                      buttonCallback: () => signup(),
+                      bottomTextCallback: () {
+                        clearFields();
+                        changeStartScreenState(StartFieldsState.login);
+                      }),
                 SizedBox(height: 100.0),
               ],
             ),

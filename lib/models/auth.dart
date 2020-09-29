@@ -1,11 +1,11 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 enum LoginState {
   loggedIn,
   userNotFound,
   wrongPassword,
+  wrongEmail,
   generalError,
 }
 
@@ -13,6 +13,7 @@ enum SignupState {
   signedUp,
   accountExists,
   weakPassword,
+  wrongEmail,
   generalError,
 }
 

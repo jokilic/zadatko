@@ -26,6 +26,7 @@ flutter:
 
   assets:
     - assets/illustrations/
+    - assets/icons/
 
   fonts:
     - family: Avenir
@@ -40,3 +41,4 @@ flutter:
         - asset: assets/fonts/Playfair Display/PlayfairDisplay-Regular.ttf
         - asset: assets/fonts/Playfair Display/PlayfairDisplay-SemiBold.ttf
           weight: 600
+

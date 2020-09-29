@@ -18,5 +18,4 @@ I have created the Login/Signup screen, but that's where everything stops.
 
 ## Quick screenshots
 
-![Dark](https://raw.githubusercontent.com/jokilic/zadatko/master/screenshots/screenshot_dark.png)
-![Light](https://raw.githubusercontent.com/jokilic/zadatko/master/screenshots/screenshot_light.png)
+![Screenshot](https://raw.githubusercontent.com/jokilic/zadatko/master/screenshots/screenshot.png)

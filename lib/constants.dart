@@ -1,16 +1,54 @@
 import 'package:flutter/material.dart';
 
+import './models/tag.dart';
+
 const String appName = 'Zadatko';
+
+// Tags
+List<Tag> tags = [
+  Tag(
+    color: bluishColor,
+    title: 'All tasks',
+  ),
+  Tag(
+    color: Colors.indigo[300],
+    title: 'Work',
+  ),
+  Tag(
+    color: Colors.green[300],
+    title: 'School',
+  ),
+  Tag(
+    color: Colors.amber[300],
+    title: 'Gym',
+  ),
+  Tag(
+    color: Colors.pink[300],
+    title: 'Shopping',
+  ),
+  Tag(
+    color: Colors.purple[300],
+    title: 'Other',
+  ),
+];
 
 // Colors
 const Color lightColor = Color(0xFFFAFAFA);
 const Color darkColor = Color(0xFF212430);
+const Color blackColor = Color(0xFF17171A);
 const Color blueColor = Color(0xFF5222D0);
 const Color redColor = Color(0xFFEC615B);
+const Color yellowColor = Color(0xFFCA994D);
+const Color bluishColor = Color(0xFF6276CA);
 
 // Fonts
 const String avenir = 'Avenir';
 const String playfair = 'Playfair Display';
+
+// Icons
+const String addIcon = 'assets/icons/add.svg';
+const String checkboxCheckedIcon = 'assets/icons/checkbox_checked.svg';
+const String checkboxUncheckedIcon = 'assets/icons/checkbox_unchecked.svg';
 
 // Illustrations
 const String ideaIllustration = 'assets/illustrations/idea.svg';
@@ -38,6 +76,7 @@ const String signupAccountExistsString = 'Accounto already existando.';
 const String signupWeakPasswordString = 'Passwordo not strongo enough.';
 const String signupGeneralErrorString = 'Accounto already existando.';
 const String generalErrorString = 'Erroro has happendo.';
+const String wrongEmailString = 'Emailo no correcto.';
 
 // Start Screen
 const String welcomeString = 'Welcome to';
@@ -58,6 +97,7 @@ const String errorString = 'Erroro has happendo!\n\n🥺';
 ThemeData theme() {
   return ThemeData(
     primaryColor: darkColor,
+    accentColor: lightColor,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: avenir,
     textTheme: TextTheme(

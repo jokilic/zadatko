@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../constants.dart';
 import '../../../components/zadatko_text_field.dart';
 import '../../../components/zadatko_button.dart';
-import '../../../models/auth.dart';
 
 // Create TextFields & other elements used in the StartScreen
 class StartFields extends StatelessWidget {
@@ -15,6 +14,11 @@ class StartFields extends StatelessWidget {
   final TextEditingController passwordController;
   final Function buttonCallback;
   final Function bottomTextCallback;
+  final bool isLoading;
+  final FocusNode emailFocusNode;
+  final FocusNode passwordFocusNode;
+  final Function emailOnEditingComplete;
+  final Function passwordOnEditingComplete;
 
   StartFields({
     @required this.titleText,
@@ -25,6 +29,11 @@ class StartFields extends StatelessWidget {
     @required this.buttonCallback,
     @required this.bottomTextCallback,
     @required this.errorText,
+    this.isLoading = false,
+    @required this.emailFocusNode,
+    @required this.passwordFocusNode,
+    @required this.emailOnEditingComplete,
+    @required this.passwordOnEditingComplete,
   });
 
   @override
@@ -42,11 +51,15 @@ class StartFields extends StatelessWidget {
           SizedBox(height: 24.0),
           ZadatkoTextField(
             hintText: emailHintText,
+            focusNode: emailFocusNode,
+            onEditingComplete: emailOnEditingComplete,
             textEditingController: emailController,
           ),
           SizedBox(height: 24.0),
           ZadatkoTextField(
             hintText: passwordHintText,
+            focusNode: passwordFocusNode,
+            onEditingComplete: passwordOnEditingComplete,
             isObscureText: true,
             textEditingController: passwordController,
           ),
@@ -58,40 +71,47 @@ class StartFields extends StatelessWidget {
                 Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 20.0),
           ),
           SizedBox(height: 20.0),
-          ZadatkoButton(
-            text: buttonText,
-            onTap: buttonCallback,
-          ),
-          SizedBox(height: 12.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                bottomTextFirstString,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    .copyWith(fontSize: 18.0),
-              ),
-              GestureDetector(
-                onTap: bottomTextCallback,
-                child: Text(
-                  bottomText,
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                      ),
+          isLoading
+              ? CircularProgressIndicator(backgroundColor: darkColor)
+              : Column(
+                  children: [
+                    ZadatkoButton(
+                      text: buttonText,
+                      onTap: buttonCallback,
+                    ),
+                    SizedBox(height: 12.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          bottomTextFirstString,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              .copyWith(fontSize: 18.0),
+                        ),
+                        GestureDetector(
+                          onTap: bottomTextCallback,
+                          child: Text(
+                            bottomText,
+                            style:
+                                Theme.of(context).textTheme.bodyText1.copyWith(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                          ),
+                        ),
+                        Text(
+                          bottomTextSecondString,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              .copyWith(fontSize: 18.0),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-              Text(
-                bottomTextSecondString,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    .copyWith(fontSize: 18.0),
-              ),
-            ],
-          ),
         ],
       ),
     );
