@@ -102,10 +102,10 @@ class _StartScreenState extends State<StartScreen> {
     FocusScope.of(context).unfocus();
     setState(() {});
     isLoading = true;
-    Validation().validateEmail(emailController.text)
+    Validation().validateEmail(emailController.text.trim())
         ? await Auth().loginFirebase(
-            emailController.text,
-            passwordController.text,
+            emailController.text.trim(),
+            passwordController.text.trim(),
           )
         : loginState = LoginState.wrongEmail;
 

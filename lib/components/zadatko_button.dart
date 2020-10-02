@@ -20,7 +20,7 @@ class ZadatkoButton extends StatelessWidget {
         vertical: 20.0,
       ),
       child: Text(
-        text,
+        text.toUpperCase(),
         style: Theme.of(context).textTheme.button,
       ),
       onPressed: onTap,

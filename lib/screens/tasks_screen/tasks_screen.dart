@@ -4,8 +4,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants.dart';
 import './components/task_widget.dart';
 import './components/tag_widget.dart';
+import './components/change_name.dart';
+import './components/create_task.dart';
+import '../../models/my_firestore.dart';
 
 int chosenTag = 0;
+bool firstStart = true;
+MyFirestore firestore = MyFirestore();
+String chosenName;
 
 class TasksScreen extends StatefulWidget {
   static const routeName = '/tasks-screen';
@@ -15,6 +21,29 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    if (firstStart) getData();
+    firstStart = false;
+  }
+
+  Future<void> getData() async {
+    // Initialize Firebase
+    await firestore.initializeFirebase();
+    // Set default values if they don't exist
+    await firestore.setDefaultValues();
+    // Store the name from Firebase
+    chosenName = await firestore.getNameFirebase();
+    // Get tags from Firebase and store them in 'listTags'
+    await firestore.getTagsFirebase();
+    // Get tasks from Firebase and store them in 'listTasks'
+    await firestore.getTasksFirebase();
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -26,15 +55,19 @@ class _TasksScreenState extends State<TasksScreen> {
         child: Column(
           children: [
             SizedBox(height: 84.0),
-            Text(
-              'Hello, Josip',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline1
-                  .copyWith(fontSize: 36.0),
+            GestureDetector(
+              onLongPress: () => changeName(context),
+              child: Text(
+                'Hello, $chosenName',
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1
+                    .copyWith(fontSize: 36.0),
+              ),
             ),
             Text(
-              'You have 5 tasks',
+              'You have ${listTasks.length} tasks',
               style: Theme.of(context)
                   .textTheme
                   .headline1
@@ -48,15 +81,21 @@ class _TasksScreenState extends State<TasksScreen> {
                 child: ListView.builder(
                   physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  itemCount: tags.length,
+                  itemCount: listTags.length,
                   itemBuilder: (context, index) => TagWidget(
-                    title: tags[index].title,
-                    backgroundColor:
-                        chosenTag == index ? Colors.white : tags[index].color,
+                    title: listTags[index].title,
+                    backgroundColor: chosenTag == index
+                        ? lightColor
+                        : tagColors[listTags[index].color],
                     textColor: chosenTag == index ? darkColor : lightColor,
                     onTap: () {
                       setState(() {
-                        chosenTag = index;
+                        // If already selected Tag is pressed, show all tasks
+                        // TODO: If 'chosenTag == null', show all tasks
+                        chosenTag == index
+                            ? chosenTag = null
+                            : chosenTag = index;
+                        print(chosenTag);
                       });
                     },
                   ),
@@ -67,41 +106,22 @@ class _TasksScreenState extends State<TasksScreen> {
             Expanded(
               child: Stack(
                 children: [
-                  ListView(
-                    physics: BouncingScrollPhysics(),
-                    children: [
-                      TaskWidget(
-                        title: 'Igrati se s bubamarama.',
-                        description:
-                            'Nađi par bubamara u vrtu i igraj se s njima.',
-                        checkbox: checkboxCheckedIcon,
-                        color: Colors.red[300],
-                        isDone: false,
+                  if (listTasks.isNotEmpty)
+                    ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: 1,
+                      itemBuilder: (context, index) => TaskWidget(
+                        title: listTasks[index].title,
+                        description: listTasks[index].description,
+                        color: tagColors[listTasks[index].tag.color],
                       ),
-                      TaskWidget(
-                        title: 'Otuširati se.',
-                        description:
-                            'Bilo bi dobro da se otuširaš, sumnjiv si...',
-                        checkbox: checkboxUncheckedIcon,
-                        color: Colors.green[300],
-                        isDone: false,
-                      ),
-                      TaskWidget(
-                        title: 'Gledati zvijezde.',
-                        description:
-                            'Trebao bi gledati zvijezde malo, zato jer su lijepe.',
-                        checkbox: checkboxCheckedIcon,
-                        color: Colors.purple[300],
-                        isDone: false,
-                      ),
-                      SizedBox(height: 56.0),
-                    ],
-                  ),
+                    ),
                   Container(
                     alignment: Alignment.bottomCenter,
                     padding: EdgeInsets.only(bottom: 16.0),
                     child: FloatingActionButton(
-                      onPressed: () => print('Hej'),
+                      // TODO: Ovdje namjesti da je odabrani tag asociran sa taskom
+                      onPressed: () => createTask(context, () => print('Jooy')),
                       child: SvgPicture.asset(
                         addIcon,
                         width: 24.0,

@@ -1,45 +1,25 @@
 import 'package:flutter/material.dart';
 
-import './models/tag.dart';
-
 const String appName = 'Zadatko';
-
-// Tags
-List<Tag> tags = [
-  Tag(
-    color: bluishColor,
-    title: 'All tasks',
-  ),
-  Tag(
-    color: Colors.indigo[300],
-    title: 'Work',
-  ),
-  Tag(
-    color: Colors.green[300],
-    title: 'School',
-  ),
-  Tag(
-    color: Colors.amber[300],
-    title: 'Gym',
-  ),
-  Tag(
-    color: Colors.pink[300],
-    title: 'Shopping',
-  ),
-  Tag(
-    color: Colors.purple[300],
-    title: 'Other',
-  ),
-];
 
 // Colors
 const Color lightColor = Color(0xFFFAFAFA);
 const Color darkColor = Color(0xFF212430);
 const Color blackColor = Color(0xFF17171A);
-const Color blueColor = Color(0xFF5222D0);
-const Color redColor = Color(0xFFEC615B);
-const Color yellowColor = Color(0xFFCA994D);
-const Color bluishColor = Color(0xFF6276CA);
+
+// Tag Colors
+List<Color> tagColors = [
+  Colors.indigo[300],
+  Colors.red[300],
+  Colors.amber[300],
+  Colors.green[300],
+  Colors.pink[300],
+  Colors.cyan[300],
+  Colors.deepOrange[300],
+  Colors.lightBlue[300],
+  Colors.purple[300],
+  Colors.teal[300],
+];
 
 // Fonts
 const String avenir = 'Avenir';
@@ -90,14 +70,17 @@ const String bottomTextFirstString = 'You can ';
 const String bottomTextSecondString = ' instead.';
 
 // Tasks Screen
-const String connectedString = 'You are logindo!\n\n🥳';
-const String errorString = 'Erroro has happendo!\n\n🥺';
+
+// Toast Strings
+const String connectedString = 'You are logindo! 🥳';
+const String errorString = 'Erroro has happendo! 🥺';
 
 // Main.dart
 ThemeData theme() {
   return ThemeData(
     primaryColor: darkColor,
     accentColor: lightColor,
+    canvasColor: Colors.transparent,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: avenir,
     textTheme: TextTheme(

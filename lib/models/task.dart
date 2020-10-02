@@ -1,17 +1,15 @@
-import 'package:flutter/material.dart';
-
 import './tag.dart';
 
-class Task extends ChangeNotifier {
-  final String text;
+class Task {
+  final String title;
+  final String description;
   final Tag tag;
-  final Color color;
   bool isDone;
 
   Task({
-    this.text,
+    this.title,
+    this.description,
     this.tag,
-    this.color,
     this.isDone = false,
   });
 }

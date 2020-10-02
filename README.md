@@ -12,7 +12,7 @@ I'm making this app because I want to work with **Firebase**.
 
 The app is in very early development.
 I have created a Firebase database, everything is connected with the app.
-I have created the Login/Signup screen, but that's where everything stops.
+I'm working on it slowly, but steadily.
 
 ### This is on GitHub because I wanted to show the progress to my friend .
 
