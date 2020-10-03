@@ -35,7 +35,7 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         loginState = LoginState.userNotFound;
-        print(loginState);
+        throw (loginState);
       } else if (e.code == 'wrong-password') {
         loginState = LoginState.wrongPassword;
         print(loginState);

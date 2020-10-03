@@ -9,7 +9,6 @@ class ZadatkoTextField extends StatelessWidget {
   final TextEditingController textEditingController;
   final FocusNode focusNode;
   final Function onEditingComplete;
-  final int maxLines;
 
   ZadatkoTextField({
     @required this.hintText,
@@ -17,7 +16,6 @@ class ZadatkoTextField extends StatelessWidget {
     @required this.textEditingController,
     @required this.focusNode,
     @required this.onEditingComplete,
-    this.maxLines = 1,
   });
 
   @override
@@ -29,7 +27,6 @@ class ZadatkoTextField extends StatelessWidget {
       child: Column(
         children: [
           TextField(
-            maxLines: maxLines,
             controller: textEditingController,
             obscureText: isObscureText,
             focusNode: focusNode,

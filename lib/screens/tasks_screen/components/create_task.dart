@@ -1,103 +1,143 @@
 import 'package:flutter/material.dart';
-import 'package:zadatko/constants.dart';
 
 import '../../../constants.dart';
-import '../../../models/my_firestore.dart';
 import './tag_widget.dart';
 import '../tasks_screen.dart';
 import '../../../components/zadatko_text_field.dart';
 import '../../../components/zadatko_button.dart';
+import '../../../models/tag.dart';
+import '../../../models/task.dart';
 
-void createTask(BuildContext context, Function tagTapped) {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  FocusNode titleFocusNode = FocusNode();
-  FocusNode descriptionFocusNode = FocusNode();
+TextEditingController titleController;
+TextEditingController descriptionController;
+FocusNode titleFocusNode;
+FocusNode descriptionFocusNode;
+double taskModalHeightPercentage;
+bool taskModalValidation;
+int chosenTagModal;
 
-  bool validation = true;
+Future<void> addTask(BuildContext context) async {
+  taskModalValidation = true;
+  if (titleController.text.isEmpty) taskModalValidation = false;
 
-  void addTask() {
-    if (titleController.text.isEmpty) validation = false;
+  if (taskModalValidation == true) {
+    await firestore.createTaskFirebase(
+      Task(
+        title: titleController.text.trim(),
+        description: descriptionController.text.trim(),
+        tag: Tag(
+          title: chosenTagModal == null
+              ? 'no_tag'
+              : localListAllTags[chosenTagModal].title,
+          color: chosenTagModal == null
+              ? 9
+              : localListAllTags[chosenTagModal].color,
+          index: chosenTagModal == null
+              ? -1
+              : localListAllTags[chosenTagModal].index,
+        ),
+        isDone: false,
+      ),
+    );
+    await firestore.getTasksFirebase();
 
-    if (validation == true) {
-      // TODO: Implement validation and push new task
-      Navigator.pop(context);
-    }
+    Navigator.pop(context);
   }
+}
 
+void createTask({
+  @required BuildContext context,
+  @required Function onTap,
+}) {
   Size size = MediaQuery.of(context).size;
+
+  titleController = TextEditingController();
+  descriptionController = TextEditingController();
+  titleFocusNode = FocusNode();
+  descriptionFocusNode = FocusNode();
+  taskModalHeightPercentage = 0.55;
+  taskModalValidation = true;
+
+  if (localListAllTags.length > 0) taskModalHeightPercentage = 0.65;
 
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
-    builder: (context) => SingleChildScrollView(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Container(
-        decoration: BoxDecoration(
-          color: darkColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.0),
-            topRight: Radius.circular(12.0),
+    builder: (context) => StatefulBuilder(
+      builder: (context, setTaskModalState) => SingleChildScrollView(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          decoration: BoxDecoration(
+            color: darkColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12.0),
+              topRight: Radius.circular(12.0),
+            ),
           ),
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: 36.0,
-          vertical: 28.0,
-        ),
-        height: size.height * 0.7,
-        width: size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              'What needs to be done?',
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline1
-                  .copyWith(fontSize: 36.0),
-            ),
-            ZadatkoTextField(
-              hintText: 'Title',
-              textEditingController: titleController,
-              focusNode: titleFocusNode,
-              onEditingComplete: () =>
-                  FocusScope.of(context).requestFocus(descriptionFocusNode),
-            ),
-            ZadatkoTextField(
-              maxLines: null,
-              hintText: 'Description',
-              textEditingController: descriptionController,
-              focusNode: descriptionFocusNode,
-              onEditingComplete: () => null,
-            ),
-            Text(
-              'Tag?',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline1
-                  .copyWith(fontSize: 28.0),
-            ),
-            SizedBox(
-              height: 50.0,
-              child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: listTags.length,
-                itemBuilder: (context, index) => TagWidget(
-                  title: listTags[index].title,
-                  backgroundColor: tagColors[listTags[index].color],
-                  textColor: chosenTag == index ? darkColor : lightColor,
-                  onTap: tagTapped,
-                ),
+          padding: EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 28.0,
+          ),
+          height: size.height * taskModalHeightPercentage,
+          width: size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                'What needs to be done?',
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1
+                    .copyWith(fontSize: 36.0),
               ),
-            ),
-            ZadatkoButton(
-              text: 'Add task',
-              onTap: () => addTask(),
-            ),
-          ],
+              ZadatkoTextField(
+                hintText: 'Title',
+                textEditingController: titleController,
+                focusNode: titleFocusNode,
+                onEditingComplete: () =>
+                    FocusScope.of(context).requestFocus(descriptionFocusNode),
+              ),
+              ZadatkoTextField(
+                hintText: 'Description',
+                textEditingController: descriptionController,
+                focusNode: descriptionFocusNode,
+                onEditingComplete: () => FocusScope.of(context).unfocus(),
+              ),
+              SizedBox(height: 8.0),
+              if (localListAllTags.length > 0)
+                SizedBox(
+                  height: 50.0,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: localListAllTags.length,
+                    itemBuilder: (context, index) => TagWidget(
+                      title: localListAllTags[index].title,
+                      backgroundColor: chosenTagModal == index
+                          ? lightColor
+                          : tagColors[localListAllTags[index].color],
+                      textColor:
+                          chosenTagModal == index ? darkColor : lightColor,
+                      onTap: () {
+                        setTaskModalState(() {
+                          chosenTagModal == index
+                              ? chosenTagModal = null
+                              : chosenTagModal = index;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              SizedBox(height: 8.0),
+              ZadatkoButton(
+                text: 'Add task',
+                onTap: onTap,
+              ),
+            ],
+          ),
         ),
       ),
     ),

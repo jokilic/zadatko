@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
+import './models/tag.dart';
+import './models/task.dart';
+
 const String appName = 'Zadatko';
+
+List<Task> localListAllTasks = [];
+List<Tag> localListAllTags = [];
+
+List<Task> localListFilteredTasks = [];
 
 // Colors
 const Color lightColor = Color(0xFFFAFAFA);
@@ -27,6 +35,8 @@ const String playfair = 'Playfair Display';
 
 // Icons
 const String addIcon = 'assets/icons/add.svg';
+const String infoIcon = 'assets/icons/info.svg';
+const String tagIcon = 'assets/icons/tag.svg';
 const String checkboxCheckedIcon = 'assets/icons/checkbox_checked.svg';
 const String checkboxUncheckedIcon = 'assets/icons/checkbox_unchecked.svg';
 

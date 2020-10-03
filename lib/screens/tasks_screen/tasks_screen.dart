@@ -5,11 +5,19 @@ import '../../constants.dart';
 import './components/task_widget.dart';
 import './components/tag_widget.dart';
 import './components/change_name.dart';
+import './components/create_tag.dart';
 import './components/create_task.dart';
 import '../../models/my_firestore.dart';
 
-int chosenTag = 0;
-bool firstStart = true;
+enum ShortText {
+  title,
+  description,
+}
+
+bool firstStart = false;
+int chosenTagMainScreen;
+int tagIndex;
+bool getDataBool = true;
 MyFirestore firestore = MyFirestore();
 String chosenName;
 
@@ -25,8 +33,8 @@ class _TasksScreenState extends State<TasksScreen> {
   void initState() {
     super.initState();
 
-    if (firstStart) getData();
-    firstStart = false;
+    if (getDataBool) getData();
+    getDataBool = false;
   }
 
   Future<void> getData() async {
@@ -41,7 +49,31 @@ class _TasksScreenState extends State<TasksScreen> {
     // Get tasks from Firebase and store them in 'listTasks'
     await firestore.getTasksFirebase();
 
+    tagIndex = localListAllTags.length;
+
+    // If there is no name (first time logged in), open 'changeName' Modal
+    if (firstStart == true) {
+      tagIndex = 0;
+      changeName(context);
+    }
+
     setState(() {});
+  }
+
+  String createShortText({
+    int index,
+    ShortText shortText,
+    int numberOfCharacters,
+  }) {
+    String currentText;
+    if (shortText == ShortText.title)
+      currentText = localListFilteredTasks[index].title;
+    else
+      currentText = localListFilteredTasks[index].description;
+
+    if (currentText.length > numberOfCharacters)
+      return '${currentText.substring(0, numberOfCharacters)}...';
+    return currentText;
   }
 
   @override
@@ -50,89 +82,159 @@ class _TasksScreenState extends State<TasksScreen> {
 
     return Scaffold(
       backgroundColor: darkColor,
-      body: Container(
-        width: size.width,
-        child: Column(
-          children: [
-            SizedBox(height: 84.0),
-            GestureDetector(
-              onLongPress: () => changeName(context),
-              child: Text(
-                'Hello, $chosenName',
-                textAlign: TextAlign.center,
+      body: SafeArea(
+        child: Container(
+          width: size.width,
+          child: Column(
+            children: [
+              ///////////////////////
+              // INFO & TAGS BUTTONS
+              ///////////////////////
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 24.0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () => print('Open info screen'),
+                      child: SvgPicture.asset(
+                        infoIcon,
+                        width: 30.0,
+                        color: lightColor,
+                      ),
+                    ),
+                    GestureDetector(
+                      // Open modal to create tag
+                      onTap: () => createTag(context),
+                      child: SvgPicture.asset(
+                        tagIcon,
+                        width: 32.0,
+                        color: lightColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ///////////////////////
+              // HEADER TEXT
+              ///////////////////////
+              GestureDetector(
+                onLongPress: () => changeName(context),
+                child: Text(
+                  'Hello, $chosenName',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1
+                      .copyWith(fontSize: 36.0),
+                ),
+              ),
+              Text(
+                'You have ${localListAllTasks.length} tasks',
                 style: Theme.of(context)
                     .textTheme
                     .headline1
-                    .copyWith(fontSize: 36.0),
+                    .copyWith(fontSize: 28.0),
               ),
-            ),
-            Text(
-              'You have ${listTasks.length} tasks',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline1
-                  .copyWith(fontSize: 28.0),
-            ),
-            SizedBox(height: 36.0),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
-              child: SizedBox(
-                height: 45.0,
-                child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: listTags.length,
-                  itemBuilder: (context, index) => TagWidget(
-                    title: listTags[index].title,
-                    backgroundColor: chosenTag == index
-                        ? lightColor
-                        : tagColors[listTags[index].color],
-                    textColor: chosenTag == index ? darkColor : lightColor,
-                    onTap: () {
-                      setState(() {
-                        // If already selected Tag is pressed, show all tasks
-                        // TODO: If 'chosenTag == null', show all tasks
-                        chosenTag == index
-                            ? chosenTag = null
-                            : chosenTag = index;
-                        print(chosenTag);
-                      });
-                    },
+              SizedBox(height: 36.0),
+              ///////////////////////
+              // TAGS
+              ///////////////////////
+              if (localListAllTags.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: SizedBox(
+                    height: 45.0,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: localListAllTags.length,
+                      itemBuilder: (context, index) => TagWidget(
+                        title: localListAllTags[index].title,
+                        backgroundColor: chosenTagMainScreen == index
+                            ? lightColor
+                            : tagColors[localListAllTags[index].color],
+                        textColor: chosenTagMainScreen == index
+                            ? darkColor
+                            : lightColor,
+                        onTap: () {
+                          setState(() {
+                            // If already selected Tag is pressed, show all tasks
+                            chosenTagMainScreen == index
+                                ? chosenTagMainScreen = null
+                                : chosenTagMainScreen = index;
+                          });
+
+                          // If no tags are pressed, show all tasks
+                          if (chosenTagMainScreen == null)
+                            localListFilteredTasks = localListAllTasks;
+                          else
+                            // Filter tasks by the index of the chosen tag
+                            localListFilteredTasks = localListAllTasks
+                                .where((task) =>
+                                    task.tag.index == chosenTagMainScreen)
+                                .toList();
+                        },
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            SizedBox(height: 24.0),
-            Expanded(
-              child: Stack(
-                children: [
-                  if (listTasks.isNotEmpty)
-                    ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: 1,
-                      itemBuilder: (context, index) => TaskWidget(
-                        title: listTasks[index].title,
-                        description: listTasks[index].description,
-                        color: tagColors[listTasks[index].tag.color],
+              SizedBox(height: 24.0),
+              Expanded(
+                child: Stack(
+                  children: [
+                    ///////////////////////
+                    // TASKS
+                    ///////////////////////
+                    if (localListFilteredTasks.isNotEmpty)
+                      ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: localListFilteredTasks.length,
+                        itemBuilder: (context, index) => TaskWidget(
+                          title: createShortText(
+                            index: index,
+                            shortText: ShortText.title,
+                            numberOfCharacters: 25,
+                          ),
+                          description: createShortText(
+                            index: index,
+                            shortText: ShortText.description,
+                            numberOfCharacters: 40,
+                          ),
+                          color: tagColors[
+                              localListFilteredTasks[index].tag.color],
+                        ),
+                      ),
+                    ///////////////////////
+                    // ADD TASK FAB
+                    ///////////////////////
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: FloatingActionButton(
+                        onPressed: () => createTask(
+                          context: context,
+                          onTap: () async {
+                            await addTask(context);
+                            setState(() {});
+                          },
+                        ),
+                        child: SvgPicture.asset(
+                          addIcon,
+                          width: 24.0,
+                          color: darkColor,
+                        ),
                       ),
                     ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    padding: EdgeInsets.only(bottom: 16.0),
-                    child: FloatingActionButton(
-                      // TODO: Ovdje namjesti da je odabrani tag asociran sa taskom
-                      onPressed: () => createTask(context, () => print('Jooy')),
-                      child: SvgPicture.asset(
-                        addIcon,
-                        width: 24.0,
-                        color: darkColor,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
