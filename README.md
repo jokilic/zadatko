@@ -22,7 +22,6 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 
 **General work**
 
-- [ ] Implement `isDone` functionality
 - [ ] All strings go in `constants.dart`
 - [ ] Check all imports - They have to be relative
 - [ ] Refactor `constants.dart`
@@ -31,17 +30,23 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 - [ ] Create icon for the app
 - [ ] Create screenshots for the Play Store
 - [ ] Build first production version of the app
+- [x] Implement `isDone` functionality
+- [x] Easier method of linking tags to tasks
+- [x] Task shouldn't be added if the title is the same as any other task
 
 **auth.dart**
 
 - [ ] Remove `print` statements and implement `throw` on errors
+
 **my_firestore.dart**
+
 - [ ] Implement `Error` enum
 - [ ] Implement `SnackBar()` for each potential error
 - [ ] Implement `updateTaskFirebase()`
 - [ ] Implement `updateTagFirebase()`
 - [ ] Implement `deleteTaskFirebase()`
 - [ ] Implement `deleteTagFirebase()`
+- [ ] Implement `toggleIsDoneFirebase()`
 
 **info_screen.dart**
 

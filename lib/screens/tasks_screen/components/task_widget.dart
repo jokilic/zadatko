@@ -3,34 +3,27 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../constants.dart';
 
-class TaskWidget extends StatefulWidget {
+class TaskWidget extends StatelessWidget {
   final String title;
   final String description;
   final Color color;
+  final Function onTap;
+  final String icon;
 
   TaskWidget({
     @required this.title,
     @required this.description,
     @required this.color,
+    @required this.onTap,
+    @required this.icon,
   });
-
-  @override
-  _TaskWidgetState createState() => _TaskWidgetState();
-}
-
-class _TaskWidgetState extends State<TaskWidget> {
-  bool isDone = false;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          isDone = !isDone;
-        });
-      },
+      onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(
           horizontal: 16.0,
@@ -51,9 +44,9 @@ class _TaskWidgetState extends State<TaskWidget> {
             Padding(
               padding: EdgeInsets.only(right: 24.0),
               child: SvgPicture.asset(
-                isDone ? checkboxCheckedIcon : checkboxUncheckedIcon,
+                icon,
                 width: 30.0,
-                color: widget.color,
+                color: color,
               ),
             ),
             Expanded(
@@ -62,7 +55,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.title,
+                    title,
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1
@@ -70,7 +63,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                   ),
                   SizedBox(height: 4.0),
                   Text(
-                    widget.description,
+                    description,
                     style: Theme.of(context).textTheme.bodyText1.copyWith(
                           fontSize: 16.0,
                           color: lightColor.withOpacity(0.6),

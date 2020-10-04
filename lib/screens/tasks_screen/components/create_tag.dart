@@ -29,10 +29,9 @@ void createTag(BuildContext context) {
         Tag(
           title: titleController.text.trim(),
           color: chosenColor ?? 0,
-          index: tagIndex,
         ),
       );
-      tagIndex++;
+
       await firestore.getTagsFirebase();
 
       Navigator.pop(context);

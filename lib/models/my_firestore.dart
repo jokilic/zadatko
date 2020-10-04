@@ -103,7 +103,6 @@ class MyFirestore {
               tag: Tag(
                 title: task.data()['tag']['title'],
                 color: task.data()['tag']['color'],
-                index: task.data()['tag']['index'],
               ),
               isDone: task.data()['isDone'],
             ),
@@ -125,13 +124,29 @@ class MyFirestore {
       'tag': {
         'title': task.tag.title,
         'color': task.tag.color,
-        'index': task.tag.index,
       },
       'isDone': task.isDone,
     };
 
     try {
-      await tasks.add(taskMap);
+      // Check if task with the same name exists
+      final QuerySnapshot querySnapshot =
+          await tasks.where('title', isEqualTo: task.title).get();
+      final List<DocumentSnapshot> documents = querySnapshot.docs;
+
+      bool taskExists = false;
+
+      documents.forEach((task) {
+        String taskTitle = task.data()['title'];
+
+        if (taskTitle == taskMap['title']) taskExists = true;
+      });
+      if (taskExists == false)
+        // Add the task
+        await tasks.doc(taskMap['title']).set(taskMap);
+      else
+        throw ('Task with the same name exists.');
+
       print('Task created successfully.');
     } catch (e) {
       throw ('Error creating Task: $e');
@@ -141,6 +156,18 @@ class MyFirestore {
   Future<void> updateTaskFirebase(Task task) async {}
 
   Future<void> deleteTaskFirebase(Task task) async {}
+
+  Future<void> toggleIsDoneFirebase(Task task) async {
+    try {
+      tasks.doc(task.title).update({
+        'isDone': task.isDone,
+      });
+
+      print('Task toggled successfully.');
+    } catch (e) {
+      throw ('Error toggling Task: $e');
+    }
+  }
 
   ///////////////////////
   /// TAGS
@@ -152,30 +179,13 @@ class MyFirestore {
 
       localListAllTags = [];
 
-      // I needed to fill the List like this because Firebase saves
-      //documents in a random order, and I need them to be ordered by the index
-      localListAllTags = List.filled(
-        documents.length,
-        Tag(
-          title: 'NoTitle',
-          color: 0,
-          index: 0,
-        ),
-        growable: true,
-      );
-
       documents.forEach(
         (tag) {
-          localListAllTags.replaceRange(
-            tag.data()['index'],
-            tag.data()['index'] + 1,
-            [
-              Tag(
-                title: tag.data()['title'],
-                color: tag.data()['color'],
-                index: tag.data()['index'],
-              ),
-            ],
+          localListAllTags.add(
+            Tag(
+              title: tag.data()['title'],
+              color: tag.data()['color'],
+            ),
           );
         },
       );
@@ -187,10 +197,9 @@ class MyFirestore {
 
   Future<void> createTagFirebase(Tag tag) async {
     try {
-      await tags.add({
+      await tags.doc(tag.title).set({
         'title': tag.title,
         'color': tag.color,
-        'index': tag.index,
       });
 
       print('Tag created successfully.');

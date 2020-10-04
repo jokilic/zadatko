@@ -16,7 +16,6 @@ enum ShortText {
 
 bool firstStart = false;
 int chosenTagMainScreen;
-int tagIndex;
 bool getDataBool = true;
 MyFirestore firestore = MyFirestore();
 String chosenName;
@@ -49,13 +48,8 @@ class _TasksScreenState extends State<TasksScreen> {
     // Get tasks from Firebase and store them in 'listTasks'
     await firestore.getTasksFirebase();
 
-    tagIndex = localListAllTags.length;
-
     // If there is no name (first time logged in), open 'changeName' Modal
-    if (firstStart == true) {
-      tagIndex = 0;
-      changeName(context);
-    }
+    if (firstStart == true) changeName(context);
 
     setState(() {});
   }
@@ -133,7 +127,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
               ),
               Text(
-                'You have ${localListAllTasks.length} tasks',
+                'You have ${localListFilteredTasks.length} tasks',
                 style: Theme.of(context)
                     .textTheme
                     .headline1
@@ -175,8 +169,12 @@ class _TasksScreenState extends State<TasksScreen> {
                           else
                             // Filter tasks by the index of the chosen tag
                             localListFilteredTasks = localListAllTasks
-                                .where((task) =>
-                                    task.tag.index == chosenTagMainScreen)
+                                .where(
+                                  (task) =>
+                                      task.tag.title ==
+                                      localListAllTags[chosenTagMainScreen]
+                                          .title,
+                                )
                                 .toList();
                         },
                       ),
@@ -207,6 +205,18 @@ class _TasksScreenState extends State<TasksScreen> {
                           ),
                           color: tagColors[
                               localListFilteredTasks[index].tag.color],
+                          // Toggle the 'isDone' state of the tapped task
+                          onTap: () {
+                            setState(() {
+                              localListFilteredTasks[index].isDone =
+                                  !localListFilteredTasks[index].isDone;
+                            });
+                            firestore.toggleIsDoneFirebase(
+                                localListFilteredTasks[index]);
+                          },
+                          icon: localListFilteredTasks[index].isDone
+                              ? checkboxCheckedIcon
+                              : checkboxUncheckedIcon,
                         ),
                       ),
                     ///////////////////////

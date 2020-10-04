@@ -17,31 +17,44 @@ bool taskModalValidation;
 int chosenTagModal;
 
 Future<void> addTask(BuildContext context) async {
-  taskModalValidation = true;
-  if (titleController.text.isEmpty) taskModalValidation = false;
+  try {
+    taskModalValidation = true;
 
-  if (taskModalValidation == true) {
-    await firestore.createTaskFirebase(
-      Task(
-        title: titleController.text.trim(),
-        description: descriptionController.text.trim(),
-        tag: Tag(
-          title: chosenTagModal == null
-              ? 'no_tag'
-              : localListAllTags[chosenTagModal].title,
-          color: chosenTagModal == null
-              ? 9
-              : localListAllTags[chosenTagModal].color,
-          index: chosenTagModal == null
-              ? -1
-              : localListAllTags[chosenTagModal].index,
+    // Validation fails if the title text is empty
+    if (titleController.text.isEmpty) {
+      taskModalValidation = false;
+      throw ('Task title is empty.');
+    }
+    // Validation fails if the task title is the same as any already created task title
+    localListAllTasks.forEach((task) {
+      if (titleController.text == task.title) {
+        taskModalValidation = false;
+        throw ('There is already a task with the same name.');
+      }
+    });
+
+    if (taskModalValidation == true) {
+      await firestore.createTaskFirebase(
+        Task(
+          title: titleController.text.trim(),
+          description: descriptionController.text.trim(),
+          tag: Tag(
+            title: chosenTagModal == null
+                ? 'no_tag'
+                : localListAllTags[chosenTagModal].title,
+            color: chosenTagModal == null
+                ? 9
+                : localListAllTags[chosenTagModal].color,
+          ),
+          isDone: false,
         ),
-        isDone: false,
-      ),
-    );
-    await firestore.getTasksFirebase();
+      );
+      await firestore.getTasksFirebase();
 
-    Navigator.pop(context);
+      Navigator.pop(context);
+    }
+  } catch (e) {
+    throw ('Error creating task: $e');
   }
 }
 
@@ -130,6 +143,15 @@ void createTask({
                       },
                     ),
                   ),
+                ),
+              SizedBox(height: 8.0),
+              if (taskModalValidation == false)
+                Text(
+                  'Task title is not good.',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1
+                      .copyWith(fontSize: 26.0),
                 ),
               SizedBox(height: 8.0),
               ZadatkoButton(
