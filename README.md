@@ -17,6 +17,7 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 - [x] Adding tags
 - [x] Linking tags & tasks
 - [x] Showing tasks by linked tab
+- [x] `isDone` functionality
 
 ### What is planned?
 
@@ -38,17 +39,17 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 
 **auth.dart**
 
-- [ ] Remove `print` statements and implement `throw` on errors
+- [x] Remove `print` statements and implement `throw` on errors
 
 **my_firestore.dart**
 
 - [ ] Implement `Error` enum
 - [ ] Implement `SnackBar()` for each potential error
-- [ ] Implement `updateTaskFirebase()`
 - [ ] Implement `updateTagFirebase()`
-- [ ] Implement `deleteTaskFirebase()`
 - [ ] Implement `deleteTagFirebase()`
-- [ ] Implement `toggleIsDoneFirebase()`
+- [x] Implement `updateTaskFirebase()`
+- [x] Implement `deleteTaskFirebase()`
+- [x] Implement `toggleIsDoneFirebase()`
 
 **info_screen.dart**
 

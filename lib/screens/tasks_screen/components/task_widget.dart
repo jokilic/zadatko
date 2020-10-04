@@ -9,6 +9,7 @@ class TaskWidget extends StatelessWidget {
   final String description;
   final Color color;
   final Function onTap;
+  final Function onLongPress;
   final String icon;
 
   TaskWidget({
@@ -16,6 +17,7 @@ class TaskWidget extends StatelessWidget {
     @required this.description,
     @required this.color,
     @required this.onTap,
+    @required this.onLongPress,
     @required this.icon,
   });
 
@@ -25,6 +27,7 @@ class TaskWidget extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Container(
         margin: EdgeInsets.symmetric(
           horizontal: 16.0,

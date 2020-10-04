@@ -11,16 +11,17 @@ import '../../../components/zadatko_button.dart';
 import '../../../models/tag.dart';
 import '../../../models/task.dart';
 
-TextEditingController titleController;
-TextEditingController descriptionController;
-FocusNode titleFocusNode;
-FocusNode descriptionFocusNode;
-double taskModalHeightPercentage;
+TextEditingController titleController = TextEditingController();
+TextEditingController descriptionController = TextEditingController();
+FocusNode titleFocusNode = FocusNode();
+FocusNode descriptionFocusNode = FocusNode();
 bool taskModalValidation;
 int chosenTagModal;
+double taskModalHeightPercentage;
+Task oldTask;
 
-// Gets called when the user presses the 'Add task' button
-Future<void> addTask(BuildContext context) async {
+// Gets called when the user presses the 'Update task' button
+Future<void> updateTask(BuildContext context) async {
   try {
     taskModalValidation = true;
 
@@ -30,54 +31,74 @@ Future<void> addTask(BuildContext context) async {
       throw (taskTitleEmptyErrorString);
     }
     // Validation fails if the task title is the same as any already created task title
+    // And if the new title is not the same as the old title
     localListAllTasks.forEach((task) {
       if (titleController.text == task.title) {
-        taskModalValidation = false;
-        throw (taskSameNameErrorString);
+        if (titleController.text != oldTask.title) {
+          taskModalValidation = false;
+          throw (taskSameNameErrorString);
+        }
       }
     });
 
-    // Task gets created
+    // Task gets updated
     if (taskModalValidation == true) {
-      await firestore.createTaskFirebase(
-        Task(
-          title: titleController.text.trim(),
-          description: descriptionController.text.trim(),
-          tag: Tag(
-            title: chosenTagModal == null
-                ? 'no_tag'
-                : localListAllTags[chosenTagModal].title,
-            color: chosenTagModal == null
-                ? 9
-                : localListAllTags[chosenTagModal].color,
-          ),
-          isDone: false,
+      Task newTask = Task(
+        title: titleController.text.trim(),
+        description: descriptionController.text.trim(),
+        tag: Tag(
+          title: chosenTagModal == null
+              ? 'no_tag'
+              : localListAllTags[chosenTagModal].title,
+          color: chosenTagModal == null
+              ? 9
+              : localListAllTags[chosenTagModal].color,
         ),
+        isDone: false,
       );
+
+      await firestore.updateTaskFirebase(oldTask, newTask);
       await firestore.getTasksFirebase();
 
       Navigator.pop(context);
     }
   } catch (e) {
-    throw (createTaskErrorString);
+    throw (updateTaskErrorString);
   }
 }
 
-// Modal that is shown when the user taps the FAB
-void createTask({
+// Gets called when the user presses the 'Update task' button
+Future<void> deleteTask(BuildContext context, Task task) async {
+  try {
+    await firestore.deleteTaskFirebase(task);
+    await firestore.getTasksFirebase();
+
+    Navigator.pop(context);
+  } catch (e) {
+    throw (deleteTaskErrorString);
+  }
+}
+
+// Modal that is shown when the user long-taps any task
+void updateDeleteTask({
   @required BuildContext context,
   @required Function onTap,
+  @required Function deleteTask,
+  @required Task task,
 }) {
   Size size = MediaQuery.of(context).size;
 
-  titleController = TextEditingController();
-  descriptionController = TextEditingController();
+  // Save original task
+  oldTask = task;
+
+  titleController.text = task.title;
+  descriptionController.text = task.description;
   titleFocusNode = FocusNode();
   descriptionFocusNode = FocusNode();
-  taskModalHeightPercentage = 0.55;
+  taskModalHeightPercentage = 0.6;
   taskModalValidation = true;
 
-  if (localListAllTags.length > 0) taskModalHeightPercentage = 0.65;
+  if (localListAllTags.length > 0) taskModalHeightPercentage = 0.7;
 
   showModalBottomSheet(
     isScrollControlled: true,
@@ -104,7 +125,7 @@ void createTask({
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                addTitleString,
+                updateTitleString,
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
@@ -112,14 +133,14 @@ void createTask({
                     .copyWith(fontSize: 36.0),
               ),
               ZadatkoTextField(
-                hintText: taskNameHintString,
+                hintText: updateTaskNameHintString,
                 textEditingController: titleController,
                 focusNode: titleFocusNode,
                 onEditingComplete: () =>
                     FocusScope.of(context).requestFocus(descriptionFocusNode),
               ),
               ZadatkoTextField(
-                hintText: taskDescriptionHintString,
+                hintText: updateTaskDescriptionHintString,
                 textEditingController: descriptionController,
                 focusNode: descriptionFocusNode,
                 onEditingComplete: onTap,
@@ -153,7 +174,7 @@ void createTask({
               SizedBox(height: 8.0),
               if (taskModalValidation == false)
                 Text(
-                  taskValidationFailedString,
+                  updateTaskValidationFailedString,
                   style: Theme.of(context)
                       .textTheme
                       .headline1
@@ -161,8 +182,13 @@ void createTask({
                 ),
               SizedBox(height: 8.0),
               ZadatkoButton(
-                text: addTaskButtonString,
+                text: updateTaskButtonString,
                 onTap: onTap,
+              ),
+              SizedBox(height: 8.0),
+              ZadatkoButton(
+                text: deleteTaskButtonString,
+                onTap: deleteTask,
               ),
             ],
           ),

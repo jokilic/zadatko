@@ -46,3 +46,7 @@ const String createTaskErrorString = 'Error creating task.';
 const String taskTitleEmptyErrorString = 'Task title is empty.';
 const String taskSameNameErrorString =
     'There is already a task with the same name.';
+
+// update_task.dart
+const String updateTaskErrorString = 'Error updating task.';
+const String deleteTaskErrorString = 'Error deleting task.';

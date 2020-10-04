@@ -10,6 +10,7 @@ import './components/tag_widget.dart';
 import './components/change_name.dart';
 import './components/create_tag.dart';
 import './components/create_task.dart';
+import './components/update_delete_task.dart';
 import '../../models/my_firestore.dart';
 
 enum ShortText {
@@ -225,6 +226,21 @@ class _TasksScreenState extends State<TasksScreen> {
                             firestore.toggleIsDoneFirebase(
                                 localListFilteredTasks[index]);
                           },
+                          onLongPress: () => updateDeleteTask(
+                            context: context,
+                            onTap: () async {
+                              await updateTask(context);
+                              setState(() {});
+                            },
+                            deleteTask: () async {
+                              await deleteTask(
+                                context,
+                                localListFilteredTasks[index],
+                              );
+                              setState(() {});
+                            },
+                            task: localListFilteredTasks[index],
+                          ),
                           icon: localListFilteredTasks[index].isDone
                               ? checkboxCheckedIcon
                               : checkboxUncheckedIcon,

@@ -150,15 +150,24 @@ class MyFirestore {
     }
   }
 
-  Future<void> updateTaskFirebase(Task task) async {
-    try {} catch (e) {
+  Future<void> updateTaskFirebase(Task oldTask, Task newTask) async {
+    // Updating is done by deleting the old task, and creating the updated one
+    try {
+      // Delete the old task
+      deleteTaskFirebase(oldTask);
+
+      // Create the new task
+      createTaskFirebase(newTask);
+    } catch (e) {
       error = Error.updateTask;
       throw (firestoreUpdatingTaskError);
     }
   }
 
   Future<void> deleteTaskFirebase(Task task) async {
-    try {} catch (e) {
+    try {
+      await tasks.doc(task.title).delete();
+    } catch (e) {
       error = Error.deleteTask;
       throw (firestoreDeletingTaskError);
     }
@@ -167,7 +176,7 @@ class MyFirestore {
   Future<void> toggleIsDoneFirebase(Task task) async {
     // Update the 'isDone' property to the new value
     try {
-      tasks.doc(task.title).update({
+      await tasks.doc(task.title).update({
         'isDone': task.isDone,
       });
     } catch (e) {

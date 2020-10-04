@@ -24,3 +24,11 @@ const String taskNameHintString = 'Title';
 const String taskDescriptionHintString = 'Description';
 const String taskValidationFailedString = 'Task title is not good.';
 const String addTaskButtonString = 'Add task';
+
+// update_delete_task.dart
+const String updateTitleString = 'Updating the task?';
+const String updateTaskNameHintString = 'Title';
+const String updateTaskDescriptionHintString = 'Description';
+const String updateTaskValidationFailedString = 'Task title is not good.';
+const String updateTaskButtonString = 'Update task';
+const String deleteTaskButtonString = 'Delete task';
