@@ -6,18 +6,21 @@ class TagWidget extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
   final Function onTap;
+  final Function onLongPress;
 
   TagWidget({
     @required this.title,
     @required this.backgroundColor,
     @required this.textColor,
     @required this.onTap,
+    @required this.onLongPress,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.0),
         padding: EdgeInsets.symmetric(

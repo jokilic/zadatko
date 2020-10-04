@@ -45,8 +45,8 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 
 - [ ] Implement `Error` enum
 - [ ] Implement `SnackBar()` for each potential error
-- [ ] Implement `updateTagFirebase()`
-- [ ] Implement `deleteTagFirebase()`
+- [x] Implement `updateTagFirebase()`
+- [x] Implement `deleteTagFirebase()`
 - [x] Implement `updateTaskFirebase()`
 - [x] Implement `deleteTaskFirebase()`
 - [x] Implement `toggleIsDoneFirebase()`

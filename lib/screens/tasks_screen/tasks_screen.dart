@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:zadatko/screens/tasks_screen/components/update_delete_tag.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/icons.dart';
@@ -78,6 +79,27 @@ class _TasksScreenState extends State<TasksScreen> {
     if (currentText.length > numberOfCharacters)
       return '${currentText.substring(0, numberOfCharacters)}...';
     return currentText;
+  }
+
+  void filterTasks(int index) {
+    setState(() {
+      // If already selected Tag is pressed, set 'chosenTagMainScreen' to NULL
+      chosenTagMainScreen == index
+          ? chosenTagMainScreen = null
+          : chosenTagMainScreen = index;
+    });
+
+    // If 'chosenTagMainScreen' is NULL, show all tasks
+    if (chosenTagMainScreen == null)
+      localListFilteredTasks = localListAllTasks;
+    else
+      // Filter tasks by the title of the chosen tag
+      localListFilteredTasks = localListAllTasks
+          .where(
+            (task) =>
+                task.tag.title == localListAllTags[chosenTagMainScreen].title,
+          )
+          .toList();
   }
 
   @override
@@ -165,28 +187,22 @@ class _TasksScreenState extends State<TasksScreen> {
                         textColor: chosenTagMainScreen == index
                             ? darkColor
                             : lightColor,
-                        onTap: () {
-                          setState(() {
-                            // If already selected Tag is pressed, set 'chosenTagMainScreen' to NULL
-                            chosenTagMainScreen == index
-                                ? chosenTagMainScreen = null
-                                : chosenTagMainScreen = index;
-                          });
-
-                          // If 'chosenTagMainScreen' is NULL, show all tasks
-                          if (chosenTagMainScreen == null)
-                            localListFilteredTasks = localListAllTasks;
-                          else
-                            // Filter tasks by the title of the chosen tag
-                            localListFilteredTasks = localListAllTasks
-                                .where(
-                                  (task) =>
-                                      task.tag.title ==
-                                      localListAllTags[chosenTagMainScreen]
-                                          .title,
-                                )
-                                .toList();
-                        },
+                        onTap: () => filterTasks(index),
+                        onLongPress: () => updateDeleteTag(
+                          context: context,
+                          onTap: () async {
+                            await updateTag(context);
+                            setState(() {});
+                          },
+                          deleteTag: () async {
+                            await deleteTag(
+                              context,
+                              localListAllTags[index],
+                            );
+                            setState(() {});
+                          },
+                          tag: localListAllTags[index],
+                        ),
                       ),
                     ),
                   ),

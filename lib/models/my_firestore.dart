@@ -224,15 +224,23 @@ class MyFirestore {
     }
   }
 
-  Future<void> updateTagFirebase(Tag tag) async {
-    try {} catch (e) {
+  Future<void> updateTagFirebase(Tag oldTag, Tag newTag) async {
+    try {
+      // Delete the old tag
+      deleteTagFirebase(oldTag);
+
+      // Create the new tag
+      createTagFirebase(newTag);
+    } catch (e) {
       error = Error.updateTag;
       throw (firestoreUpdatingTagError);
     }
   }
 
   Future<void> deleteTagFirebase(Tag tag) async {
-    try {} catch (e) {
+    try {
+      await tags.doc(tag.title).delete();
+    } catch (e) {
       error = Error.deleteTag;
       throw (firestoreDeletingTagError);
     }

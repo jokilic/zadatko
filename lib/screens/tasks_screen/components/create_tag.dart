@@ -104,7 +104,7 @@ void createTag(BuildContext context) {
               ),
               SizedBox(height: 32.0),
               ColorPicker(),
-              SizedBox(height: 16.0),
+              SizedBox(height: 32.0),
               ZadatkoButton(
                 text: addTagButtonString,
                 onTap: () async {

@@ -125,7 +125,7 @@ void updateDeleteTask({
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                updateTitleString,
+                updateTaskTitleString,
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
@@ -168,6 +168,7 @@ void updateDeleteTask({
                               : chosenTagModal = index;
                         });
                       },
+                      onLongPress: null,
                     ),
                   ),
                 ),

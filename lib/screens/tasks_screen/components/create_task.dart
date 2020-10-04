@@ -147,6 +147,7 @@ void createTask({
                               : chosenTagModal = index;
                         });
                       },
+                      onLongPress: null,
                     ),
                   ),
                 ),
