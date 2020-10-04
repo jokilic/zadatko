@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Widget showing a tag in the TasksScreen
 class TagWidget extends StatelessWidget {
   final String title;
   final Color backgroundColor;

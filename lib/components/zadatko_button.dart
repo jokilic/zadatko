@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../constants/colors.dart';
 
 // Standardized button used across the app
 class ZadatkoButton extends StatelessWidget {
@@ -24,7 +24,6 @@ class ZadatkoButton extends StatelessWidget {
         style: Theme.of(context).textTheme.button,
       ),
       onPressed: onTap,
-      // color: color,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
         side: BorderSide(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/zadatko_button.dart';
-import '../../../constants.dart';
+import '../../../constants/start_screen.dart';
 
 // Create buttons used in the StartScreen
 Widget buildStartButtons({

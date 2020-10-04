@@ -7,6 +7,7 @@ import '../../components/error_screen.dart';
 import '../start_screen/start_screen.dart';
 import '../tasks_screen/tasks_screen.dart';
 
+// Gets run first because Firebase needs to be initalized
 class LoadingScreen extends StatelessWidget {
   static const routeName = '/loading-screen';
 

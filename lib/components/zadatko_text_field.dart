@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../constants/colors.dart';
 
 // Standardized TextField used across the app
 class ZadatkoTextField extends StatelessWidget {

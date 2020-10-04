@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/start_screen.dart';
 import '../../../components/zadatko_text_field.dart';
 import '../../../components/zadatko_button.dart';
 

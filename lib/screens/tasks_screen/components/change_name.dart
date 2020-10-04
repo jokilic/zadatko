@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:zadatko/constants.dart';
 
+import '../../../constants/colors.dart';
+import '../../../constants/tasks_screen.dart';
 import '../tasks_screen.dart';
 import '../../../components/zadatko_text_field.dart';
 import '../../../components/zadatko_button.dart';
 
+// Modal that is shown when the user long-taps on the name
 void changeName(BuildContext context) {
   TextEditingController changeNameController = TextEditingController();
   FocusNode changeNameFocusNode = FocusNode();
 
+  // Gets called when the user presses the 'Update' button
   void updateName() {
     if (changeNameController.text.isNotEmpty) {
       chosenName = changeNameController.text;
       firestore.updateNameFirebase(chosenName);
       Navigator.pop(context);
-      print(chosenName);
     }
   }
 
@@ -44,7 +46,7 @@ void changeName(BuildContext context) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Change your name',
+              changeNameString,
               textAlign: TextAlign.center,
               style: Theme.of(context)
                   .textTheme
@@ -57,14 +59,14 @@ void changeName(BuildContext context) {
                 bottom: 42.0,
               ),
               child: ZadatkoTextField(
-                hintText: 'Enter your name',
+                hintText: titleFieldHintString,
                 textEditingController: changeNameController,
                 focusNode: changeNameFocusNode,
                 onEditingComplete: () => updateName(),
               ),
             ),
             ZadatkoButton(
-              text: 'Update',
+              text: changeNameButtonString,
               onTap: () => updateName(),
             ),
           ],

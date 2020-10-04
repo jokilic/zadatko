@@ -2,7 +2,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../constants.dart';
+import '../../constants/colors.dart';
+import '../../constants/errors.dart';
+import '../../constants/illustrations.dart';
+import '../../constants/start_screen.dart';
 import '../../models/auth.dart';
 import '../../models/validation.dart';
 import './components/start_fields.dart';
@@ -61,6 +64,7 @@ class _StartScreenState extends State<StartScreen> {
     setState(() {});
   }
 
+  // Shows the proper error on screen
   void generateSignupErrorText() {
     switch (signupState) {
       case SignupState.accountExists:
@@ -98,10 +102,13 @@ class _StartScreenState extends State<StartScreen> {
     });
   }
 
+  // Gets called when the user presses the Login button
   Future<void> login() async {
     FocusScope.of(context).unfocus();
     setState(() {});
     isLoading = true;
+
+    // Validating email
     Validation().validateEmail(emailController.text.trim())
         ? await Auth().loginFirebase(
             emailController.text.trim(),
@@ -113,10 +120,13 @@ class _StartScreenState extends State<StartScreen> {
     isLoading = false;
   }
 
+  // Gets called when the user presses the Login button
   Future<void> signup() async {
     FocusScope.of(context).unfocus();
     setState(() {});
     isLoading = true;
+
+    // Validating email
     Validation().validateEmail(emailController.text)
         ? await Auth().signupFirebase(
             emailController.text,

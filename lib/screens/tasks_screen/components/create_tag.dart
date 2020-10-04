@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/errors.dart';
+import '../../../constants/general.dart';
+import '../../../constants/tasks_screen.dart';
 import './color_picker.dart';
 import '../tasks_screen.dart';
 import '../../../components/zadatko_text_field.dart';
@@ -9,6 +12,7 @@ import '../../../models/tag.dart';
 
 double tagModalHeightPercentage;
 
+// Modal that is shown when the user taps the Tag icon
 void createTag(BuildContext context) {
   chosenColor = null;
   TextEditingController titleController = TextEditingController();
@@ -17,24 +21,41 @@ void createTag(BuildContext context) {
 
   bool tagModalValidation = true;
 
+  // Gets called when the user presses the 'Create tag' button
   Future<void> addTag() async {
-    tagModalValidation = true;
-    if (titleController.text.isEmpty) {
-      tagModalValidation = false;
-      tagModalHeightPercentage = 0.6;
-    }
+    try {
+      tagModalValidation = true;
 
-    if (tagModalValidation == true) {
-      await firestore.createTagFirebase(
-        Tag(
-          title: titleController.text.trim(),
-          color: chosenColor ?? 0,
-        ),
-      );
+      // Validation fails if the tag text is empty
+      if (titleController.text.isEmpty) {
+        tagModalValidation = false;
+        tagModalHeightPercentage = 0.6;
+        throw (tagTitleEmptyErrorString);
+      }
 
-      await firestore.getTagsFirebase();
+      // Validation fails if the tag title is the same as any already created tag title
+      localListAllTags.forEach((tag) {
+        if (titleController.text == tag.title) {
+          tagModalValidation = false;
+          throw (tagSameNameErrorString);
+        }
+      });
 
-      Navigator.pop(context);
+      // Tag gets created
+      if (tagModalValidation == true) {
+        await firestore.createTagFirebase(
+          Tag(
+            title: titleController.text.trim(),
+            color: chosenColor ?? 0,
+          ),
+        );
+
+        await firestore.getTagsFirebase();
+
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      throw (createTagErrorString);
     }
   }
 
@@ -64,7 +85,7 @@ void createTag(BuildContext context) {
           child: Column(
             children: [
               Text(
-                'Add a new tag',
+                addTagString,
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
@@ -73,33 +94,19 @@ void createTag(BuildContext context) {
               ),
               SizedBox(height: 24.0),
               ZadatkoTextField(
-                hintText: 'Name',
+                hintText: tagNameHintString,
                 textEditingController: titleController,
                 focusNode: titleFocusNode,
-                onEditingComplete: () {
-                  setTagModalState(() {
-                    addTag();
-                  });
+                onEditingComplete: () async {
+                  await addTag();
+                  setTagModalState(() {});
                 },
               ),
               SizedBox(height: 32.0),
               ColorPicker(),
               SizedBox(height: 16.0),
-              if (!tagModalValidation)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Text(
-                    'Where\'s the name, you jabroni.',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1
-                        .copyWith(fontSize: 26.0),
-                  ),
-                ),
-              SizedBox(height: 24.0),
               ZadatkoButton(
-                text: 'Create tag',
+                text: addTagButtonString,
                 onTap: () async {
                   await addTag();
                   setTagModalState(() {});

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../constants/errors.dart';
+
 enum LoginState {
   loggedIn,
   userNotFound,
@@ -23,7 +25,9 @@ SignupState signupState;
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 class Auth {
-  // Login to Firebase with Email & Password
+  ///////////////////////
+  /// LOGIN
+  ///////////////////////
   Future<void> loginFirebase(String email, String password) async {
     try {
       await firebaseAuth.signInWithEmailAndPassword(
@@ -31,24 +35,23 @@ class Auth {
         password: password,
       );
       loginState = LoginState.loggedIn;
-      print(loginState);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         loginState = LoginState.userNotFound;
-        throw (loginState);
+        throw (authUserNotFound);
       } else if (e.code == 'wrong-password') {
         loginState = LoginState.wrongPassword;
-        print(loginState);
+        throw (authPasswordWrong);
       }
     } catch (e) {
       loginState = LoginState.generalError;
-      print(loginState);
-      print('Zadatko: ${e.toString()}');
-      print(e.message);
+      throw (authLoginError);
     }
   }
 
-  // Signup to Firebase with Email & Password
+  ///////////////////////
+  /// SIGNUP
+  ///////////////////////
   Future<void> signupFirebase(String email, String password) async {
     try {
       await firebaseAuth.createUserWithEmailAndPassword(
@@ -59,18 +62,25 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         signupState = SignupState.weakPassword;
-        print('Zadatko: The password provided is too weak.');
+        throw (authPasswordWeak);
       } else if (e.code == 'email-already-in-use') {
         signupState = SignupState.accountExists;
-        print('Zadatko: The account already exists for that email.');
+        throw (authEmailInUse);
       }
     } catch (e) {
       signupState = SignupState.generalError;
-      print('Zadatko: ${e.toString()}');
-      print(e.message);
+      throw (authSignupError);
     }
   }
 
-  // Sign out of Firebase
-  Future<void> signOutFirebase() async => await firebaseAuth.signOut();
+  ///////////////////////
+  /// SIGNOUT
+  ///////////////////////
+  Future<void> signOutFirebase() async {
+    try {
+      await firebaseAuth.signOut();
+    } catch (e) {
+      throw (authSignoutError);
+    }
+  }
 }

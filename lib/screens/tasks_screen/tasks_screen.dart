@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../constants.dart';
+import '../../constants/colors.dart';
+import '../../constants/icons.dart';
+import '../../constants/general.dart';
+import '../../constants/tasks_screen.dart';
 import './components/task_widget.dart';
 import './components/tag_widget.dart';
 import './components/change_name.dart';
@@ -14,11 +17,15 @@ enum ShortText {
   description,
 }
 
-bool firstStart = false;
 int chosenTagMainScreen;
-bool getDataBool = true;
 MyFirestore firestore = MyFirestore();
 String chosenName;
+
+// Set to true if there's no name set for the user - User just signed up
+bool firstStart = false;
+
+// Created because 'initState()' got triggered on each screen redraw
+bool getDataBool = true;
 
 class TasksScreen extends StatefulWidget {
   static const routeName = '/tasks-screen';
@@ -32,6 +39,7 @@ class _TasksScreenState extends State<TasksScreen> {
   void initState() {
     super.initState();
 
+    // Gets called when the user starts the app
     if (getDataBool) getData();
     getDataBool = false;
   }
@@ -54,6 +62,7 @@ class _TasksScreenState extends State<TasksScreen> {
     setState(() {});
   }
 
+  // Trims the text in order not to overflow the screen
   String createShortText({
     int index,
     ShortText shortText,
@@ -118,7 +127,7 @@ class _TasksScreenState extends State<TasksScreen> {
               GestureDetector(
                 onLongPress: () => changeName(context),
                 child: Text(
-                  'Hello, $chosenName',
+                  '$helloString $chosenName',
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
@@ -127,7 +136,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
               ),
               Text(
-                'You have ${localListFilteredTasks.length} tasks',
+                '$numberOfTasksFirstString ${localListFilteredTasks.length} $numberOfTasksSecondString',
                 style: Theme.of(context)
                     .textTheme
                     .headline1
@@ -157,17 +166,17 @@ class _TasksScreenState extends State<TasksScreen> {
                             : lightColor,
                         onTap: () {
                           setState(() {
-                            // If already selected Tag is pressed, show all tasks
+                            // If already selected Tag is pressed, set 'chosenTagMainScreen' to NULL
                             chosenTagMainScreen == index
                                 ? chosenTagMainScreen = null
                                 : chosenTagMainScreen = index;
                           });
 
-                          // If no tags are pressed, show all tasks
+                          // If 'chosenTagMainScreen' is NULL, show all tasks
                           if (chosenTagMainScreen == null)
                             localListFilteredTasks = localListAllTasks;
                           else
-                            // Filter tasks by the index of the chosen tag
+                            // Filter tasks by the title of the chosen tag
                             localListFilteredTasks = localListAllTasks
                                 .where(
                                   (task) =>
@@ -205,12 +214,14 @@ class _TasksScreenState extends State<TasksScreen> {
                           ),
                           color: tagColors[
                               localListFilteredTasks[index].tag.color],
-                          // Toggle the 'isDone' state of the tapped task
                           onTap: () {
                             setState(() {
+                              // Toggle the 'isDone' state of the tapped task
                               localListFilteredTasks[index].isDone =
                                   !localListFilteredTasks[index].isDone;
                             });
+
+                            // Toggle 'isDone' in Firebase
                             firestore.toggleIsDoneFirebase(
                                 localListFilteredTasks[index]);
                           },

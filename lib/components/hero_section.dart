@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../constants/general.dart';
+import '../constants/start_screen.dart';
 
-// The title on the top of the Screen
+// The title on the top of the StartScreen
 class HeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

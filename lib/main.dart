@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import './constants.dart';
-import './routes.dart';
+import './constants/general.dart';
+import './constants/theme.dart';
+import './constants/routes.dart';
 import './screens/loading_screen/loading_screen.dart';
 
 void main() => runApp(Zadatko());

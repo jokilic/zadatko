@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../constants.dart';
+import '../../../constants/colors.dart';
 
+// Widget showing a task in the TasksScreen
 class TaskWidget extends StatelessWidget {
   final String title;
   final String description;

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/errors.dart';
+import '../../../constants/general.dart';
+import '../../../constants/tasks_screen.dart';
 import './tag_widget.dart';
 import '../tasks_screen.dart';
 import '../../../components/zadatko_text_field.dart';
@@ -16,6 +19,7 @@ double taskModalHeightPercentage;
 bool taskModalValidation;
 int chosenTagModal;
 
+// Gets called when the user presses the 'Add task' button
 Future<void> addTask(BuildContext context) async {
   try {
     taskModalValidation = true;
@@ -23,16 +27,17 @@ Future<void> addTask(BuildContext context) async {
     // Validation fails if the title text is empty
     if (titleController.text.isEmpty) {
       taskModalValidation = false;
-      throw ('Task title is empty.');
+      throw (taskTitleEmptyErrorString);
     }
     // Validation fails if the task title is the same as any already created task title
     localListAllTasks.forEach((task) {
       if (titleController.text == task.title) {
         taskModalValidation = false;
-        throw ('There is already a task with the same name.');
+        throw (taskSameNameErrorString);
       }
     });
 
+    // Task gets created
     if (taskModalValidation == true) {
       await firestore.createTaskFirebase(
         Task(
@@ -54,10 +59,11 @@ Future<void> addTask(BuildContext context) async {
       Navigator.pop(context);
     }
   } catch (e) {
-    throw ('Error creating task: $e');
+    throw (createTaskErrorString);
   }
 }
 
+// Modal that is shown when the user taps the FAB
 void createTask({
   @required BuildContext context,
   @required Function onTap,
@@ -98,7 +104,7 @@ void createTask({
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                'What needs to be done?',
+                addTitleString,
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
@@ -106,14 +112,14 @@ void createTask({
                     .copyWith(fontSize: 36.0),
               ),
               ZadatkoTextField(
-                hintText: 'Title',
+                hintText: taskNameHintString,
                 textEditingController: titleController,
                 focusNode: titleFocusNode,
                 onEditingComplete: () =>
                     FocusScope.of(context).requestFocus(descriptionFocusNode),
               ),
               ZadatkoTextField(
-                hintText: 'Description',
+                hintText: taskDescriptionHintString,
                 textEditingController: descriptionController,
                 focusNode: descriptionFocusNode,
                 onEditingComplete: () => FocusScope.of(context).unfocus(),
@@ -147,7 +153,7 @@ void createTask({
               SizedBox(height: 8.0),
               if (taskModalValidation == false)
                 Text(
-                  'Task title is not good.',
+                  taskValidationFailedString,
                   style: Theme.of(context)
                       .textTheme
                       .headline1
@@ -155,7 +161,7 @@ void createTask({
                 ),
               SizedBox(height: 8.0),
               ZadatkoButton(
-                text: 'Add task',
+                text: addTaskButtonString,
                 onTap: onTap,
               ),
             ],

@@ -22,14 +22,16 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 
 **General work**
 
-- [ ] All strings go in `constants.dart`
-- [ ] Check all imports - They have to be relative
-- [ ] Refactor `constants.dart`
-- [ ] Remove all `print` statements
-- [ ] Refactor code & write comments where needed
+- [ ] Generate new colors for the tags
 - [ ] Create icon for the app
 - [ ] Create screenshots for the Play Store
 - [ ] Build first production version of the app
+- [x] Refactor code & write comments where needed
+- [x] Check all imports - They have to be relative
+- [x] Remove all `print` statements
+- [x] Create multiple files for the Strings - Break up `constants.dart`
+- [x] Refactor `constants.dart`
+- [x] All strings go in `constants.dart`
 - [x] Implement `isDone` functionality
 - [x] Easier method of linking tags to tasks
 - [x] Task shouldn't be added if the title is the same as any other task
@@ -59,6 +61,7 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 **tasks_screen.dart**
 
 - [ ] Loading screen until everything gets loaded
+- [ ] If there are no tasks, show some screen with illustration and message
 - [ ] Put **Sign-out** button somewhere
 
 ## Quick screenshots

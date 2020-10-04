@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-
+// Should be a SnackBar()
 class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        errorString,
+        'Erroro has happendo. 🥺',
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.headline1,
       ),

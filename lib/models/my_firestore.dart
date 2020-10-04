@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import './task.dart';
 import './tag.dart';
-import '../constants.dart';
+import '../constants/general.dart';
+import '../constants/errors.dart';
 import '../screens/tasks_screen/tasks_screen.dart';
 
 enum Error {
@@ -15,15 +16,21 @@ enum Error {
   getTasks,
   updateTask,
   createTask,
+  deleteTask,
+  toggleTask,
   getTags,
   updateTag,
   createTag,
+  deleteTag,
 }
 
 String uid;
 DocumentReference user;
 CollectionReference tasks;
 CollectionReference tags;
+
+// Initialize the 'Error' enum
+Error error = Error.no;
 
 class MyFirestore {
   ///////////////////////
@@ -43,10 +50,12 @@ class MyFirestore {
       // Get Tags Collection
       tags = user.collection('tags');
     } catch (e) {
-      throw ('Error initializing Firebase: $e');
+      error = Error.initialize;
+      throw (firestoreInitializeError);
     }
   }
 
+  // If the user is logged in for the first time
   Future<void> setDefaultValues() async {
     try {
       final DocumentSnapshot name = await user.get();
@@ -55,7 +64,8 @@ class MyFirestore {
         await updateNameFirebase('someone');
       }
     } catch (e) {
-      throw ('Error setting default values: $e');
+      error = Error.setDefault;
+      throw (firestoreDefaultValuesError);
     }
   }
 
@@ -66,10 +76,10 @@ class MyFirestore {
     try {
       final DocumentSnapshot name = await user.get();
       String newName = name.data()['name'];
-      print('Name: $newName');
       return newName;
     } catch (e) {
-      throw ('Error getting name: $e');
+      error = Error.getName;
+      throw (firestoreGettingNameError);
     }
   }
 
@@ -78,9 +88,9 @@ class MyFirestore {
       await user.set({
         'name': name,
       });
-      print('Name updated successfully.');
     } catch (e) {
-      throw ('Error updating name: $e');
+      error = Error.updateName;
+      throw (firestoreUpdatingNameError);
     }
   }
 
@@ -94,6 +104,7 @@ class MyFirestore {
 
       localListAllTasks = [];
 
+      // Store all tasks from Firebase in a local List of Tasks
       documents.forEach(
         (task) {
           localListAllTasks.add(
@@ -109,15 +120,17 @@ class MyFirestore {
           );
         },
       );
-      localListFilteredTasks = localListAllTasks;
 
-      print('Number of tasks: ${localListAllTasks.length}');
+      // Create a list used for filtering with all of the values from Firebase
+      localListFilteredTasks = localListAllTasks;
     } catch (e) {
-      throw ('Error getting tasks: $e');
+      error = Error.getTasks;
+      throw (firestoreGettingTasksError);
     }
   }
 
   Future<void> createTaskFirebase(Task task) async {
+    // Create a Map with all task keys and values
     Map<String, dynamic> taskMap = {
       'title': task.title,
       'description': task.description,
@@ -128,44 +141,38 @@ class MyFirestore {
       'isDone': task.isDone,
     };
 
+    // Add the task to Firebase
     try {
-      // Check if task with the same name exists
-      final QuerySnapshot querySnapshot =
-          await tasks.where('title', isEqualTo: task.title).get();
-      final List<DocumentSnapshot> documents = querySnapshot.docs;
-
-      bool taskExists = false;
-
-      documents.forEach((task) {
-        String taskTitle = task.data()['title'];
-
-        if (taskTitle == taskMap['title']) taskExists = true;
-      });
-      if (taskExists == false)
-        // Add the task
-        await tasks.doc(taskMap['title']).set(taskMap);
-      else
-        throw ('Task with the same name exists.');
-
-      print('Task created successfully.');
+      await tasks.doc(taskMap['title']).set(taskMap);
     } catch (e) {
-      throw ('Error creating Task: $e');
+      error = Error.createTask;
+      throw (firestoreCreatingTaskError);
     }
   }
 
-  Future<void> updateTaskFirebase(Task task) async {}
+  Future<void> updateTaskFirebase(Task task) async {
+    try {} catch (e) {
+      error = Error.updateTask;
+      throw (firestoreUpdatingTaskError);
+    }
+  }
 
-  Future<void> deleteTaskFirebase(Task task) async {}
+  Future<void> deleteTaskFirebase(Task task) async {
+    try {} catch (e) {
+      error = Error.deleteTask;
+      throw (firestoreDeletingTaskError);
+    }
+  }
 
   Future<void> toggleIsDoneFirebase(Task task) async {
+    // Update the 'isDone' property to the new value
     try {
       tasks.doc(task.title).update({
         'isDone': task.isDone,
       });
-
-      print('Task toggled successfully.');
     } catch (e) {
-      throw ('Error toggling Task: $e');
+      error = Error.toggleTask;
+      throw (firestoreTogglingTaskError);
     }
   }
 
@@ -179,6 +186,7 @@ class MyFirestore {
 
       localListAllTags = [];
 
+      // Store all tasks from Firebase in a local List of Tags
       documents.forEach(
         (tag) {
           localListAllTags.add(
@@ -189,9 +197,9 @@ class MyFirestore {
           );
         },
       );
-      print('Number of tags: ${localListAllTags.length}');
     } catch (e) {
-      throw ('Error getting tags: $e');
+      error = Error.getTags;
+      throw (firestoreGettingTagsError);
     }
   }
 
@@ -201,14 +209,23 @@ class MyFirestore {
         'title': tag.title,
         'color': tag.color,
       });
-
-      print('Tag created successfully.');
     } catch (e) {
-      throw ('Error creating Tag: $e');
+      error = Error.createTag;
+      throw (firestoreCreatingTagsError);
     }
   }
 
-  Future<void> updateTagFirebase(Tag tag) async {}
+  Future<void> updateTagFirebase(Tag tag) async {
+    try {} catch (e) {
+      error = Error.updateTag;
+      throw (firestoreUpdatingTagError);
+    }
+  }
 
-  Future<void> deleteTagFirebase(Tag tag) async {}
+  Future<void> deleteTagFirebase(Tag tag) async {
+    try {} catch (e) {
+      error = Error.deleteTag;
+      throw (firestoreDeletingTagError);
+    }
+  }
 }
