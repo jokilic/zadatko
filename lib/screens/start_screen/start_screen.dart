@@ -1,8 +1,8 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../constants/colors.dart';
+import '../../constants/enums.dart';
 import '../../constants/errors.dart';
 import '../../constants/illustrations.dart';
 import '../../constants/start_screen.dart';
@@ -11,12 +11,6 @@ import '../../models/validation.dart';
 import './components/start_fields.dart';
 import './components/build_start_buttons.dart';
 import '../../components/hero_section.dart';
-
-enum StartFieldsState {
-  start,
-  login,
-  signup,
-}
 
 bool isLoading = false;
 StartFieldsState startFieldsState = StartFieldsState.start;
@@ -35,10 +29,6 @@ class _StartScreenState extends State<StartScreen> {
   FocusNode passwordFocusNode = FocusNode();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
-  // Get an illustration to show on the StartScreen
-  String get getRandomIllustration =>
-      illustrations[Random().nextInt(illustrations.length)];
 
   // Used for Login errors
   void generateLoginErrorText() {
@@ -150,6 +140,7 @@ class _StartScreenState extends State<StartScreen> {
           child: Container(
             width: size.width,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 56.0),
                 HeroSection(),
@@ -180,10 +171,10 @@ class _StartScreenState extends State<StartScreen> {
                       passwordFocusNode: passwordFocusNode,
                       emailOnEditingComplete: () => FocusScope.of(context)
                           .requestFocus(passwordFocusNode),
-                      passwordOnEditingComplete: () => login(),
+                      passwordOnEditingComplete: () async => await login(),
                       emailController: emailController,
                       passwordController: passwordController,
-                      buttonCallback: () => login(),
+                      buttonCallback: () async => await login(),
                       bottomTextCallback: () {
                         clearFields();
                         changeStartScreenState(StartFieldsState.signup);
@@ -200,10 +191,10 @@ class _StartScreenState extends State<StartScreen> {
                       passwordFocusNode: passwordFocusNode,
                       emailOnEditingComplete: () => FocusScope.of(context)
                           .requestFocus(passwordFocusNode),
-                      passwordOnEditingComplete: () => signup(),
+                      passwordOnEditingComplete: () async => await signup(),
                       emailController: emailController,
                       passwordController: passwordController,
-                      buttonCallback: () => signup(),
+                      buttonCallback: () async => await signup(),
                       bottomTextCallback: () {
                         clearFields();
                         changeStartScreenState(StartFieldsState.login);

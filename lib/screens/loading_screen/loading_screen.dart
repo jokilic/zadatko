@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../constants/errors.dart';
 import '../../components/loading.dart';
-import '../../components/error_screen.dart';
 import '../start_screen/start_screen.dart';
 import '../tasks_screen/tasks_screen.dart';
+import '../../components/my_error_widget.dart';
 
 // Gets run first because Firebase needs to be initalized
 class LoadingScreen extends StatelessWidget {
@@ -21,7 +22,7 @@ class LoadingScreen extends StatelessWidget {
       builder: (context, snapshot) {
         // Show Error Screen if the initialization throws an error
         if (snapshot.hasError) {
-          return ErrorScreen();
+          return MyErrorWidget(firestoreInitializeError);
         }
 
         // Return a StreamBuilder if the Firebase app initializes

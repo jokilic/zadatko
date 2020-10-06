@@ -1,33 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:zadatko/screens/tasks_screen/components/update_delete_tag.dart';
 
 import '../../constants/colors.dart';
+import '../../constants/enums.dart';
+import '../../constants/errors.dart';
 import '../../constants/icons.dart';
 import '../../constants/general.dart';
 import '../../constants/tasks_screen.dart';
+import '../../components/my_error_widget.dart';
+import '../../components/loading.dart';
 import './components/task_widget.dart';
 import './components/tag_widget.dart';
 import './components/change_name.dart';
 import './components/create_tag.dart';
 import './components/create_task.dart';
+import './components/update_delete_tag.dart';
 import './components/update_delete_task.dart';
+import '../../components/illustration.dart';
 import '../../models/my_firestore.dart';
-
-enum ShortText {
-  title,
-  description,
-}
+import '../info_screen/info_screen.dart';
 
 int chosenTagMainScreen;
 MyFirestore firestore = MyFirestore();
 String chosenName;
 
-// Set to true if there's no name set for the user - User just signed up
+// Set to true if there's no name set for the user
 bool firstStart = false;
-
-// Created because 'initState()' got triggered on each screen redraw
-bool getDataBool = true;
+bool loadingScreen = true;
 
 class TasksScreen extends StatefulWidget {
   static const routeName = '/tasks-screen';
@@ -41,27 +40,38 @@ class _TasksScreenState extends State<TasksScreen> {
   void initState() {
     super.initState();
 
-    // Gets called when the user starts the app
-    if (getDataBool) getData();
-    getDataBool = false;
+    loadingScreen = true;
+    myFirebaseError = MyFirebaseError.no;
+    getData();
   }
 
   Future<void> getData() async {
-    // Initialize Firebase
-    await firestore.initializeFirebase();
-    // Set default values if they don't exist
-    await firestore.setDefaultValues();
-    // Store the name from Firebase
-    chosenName = await firestore.getNameFirebase();
-    // Get tags from Firebase and store them in 'listTags'
-    await firestore.getTagsFirebase();
-    // Get tasks from Firebase and store them in 'listTasks'
-    await firestore.getTasksFirebase();
+    loadingScreen = true;
 
-    // If there is no name (first time logged in), open 'changeName' Modal
-    if (firstStart == true) changeName(context);
+    try {
+      // Initialize Firebase
+      await firestore.initializeFirebase();
+      // Set default values if they don't exist
+      await firestore.setDefaultValues();
+      // Store the name from Firebase
+      chosenName = await firestore.getNameFirebase();
+      // Get tags from Firebase and store them in 'listTags'
+      await firestore.getTagsFirebase();
+      // Get tasks from Firebase and store them in 'listTasks'
+      await firestore.getTasksFirebase();
 
-    setState(() {});
+      // If there is no name (first time logged in), open 'changeName' Modal
+      if (firstStart == true) changeName(context);
+
+      loadingScreen = false;
+
+      setState(() {});
+    } catch (e) {
+      myFirebaseError = MyFirebaseError.initialize;
+      loadingScreen = false;
+      print(firestoreInitializeError);
+      // throw (firestoreInitializeError);
+    }
   }
 
   // Trims the text in order not to overflow the screen
@@ -75,6 +85,9 @@ class _TasksScreenState extends State<TasksScreen> {
       currentText = localListFilteredTasks[index].title;
     else
       currentText = localListFilteredTasks[index].description;
+
+    // Replace all new lines with spaces
+    currentText = currentText.replaceAll('\n', ' ');
 
     if (currentText.length > numberOfCharacters)
       return '${currentText.substring(0, numberOfCharacters)}...';
@@ -109,187 +122,238 @@ class _TasksScreenState extends State<TasksScreen> {
     return Scaffold(
       backgroundColor: darkColor,
       body: SafeArea(
-        child: Container(
-          width: size.width,
-          child: Column(
-            children: [
-              ///////////////////////
-              // INFO & TAGS BUTTONS
-              ///////////////////////
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 24.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () => print('Open info screen'),
-                      child: SvgPicture.asset(
-                        infoIcon,
-                        width: 30.0,
-                        color: lightColor,
-                      ),
-                    ),
-                    GestureDetector(
-                      // Open modal to create tag
-                      onTap: () => createTag(context),
-                      child: SvgPicture.asset(
-                        tagIcon,
-                        width: 32.0,
-                        color: lightColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              ///////////////////////
-              // HEADER TEXT
-              ///////////////////////
-              GestureDetector(
-                onLongPress: () => changeName(context),
-                child: Text(
-                  '$helloString $chosenName',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1
-                      .copyWith(fontSize: 36.0),
-                ),
-              ),
-              Text(
-                '$numberOfTasksFirstString ${localListFilteredTasks.length} $numberOfTasksSecondString',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1
-                    .copyWith(fontSize: 28.0),
-              ),
-              SizedBox(height: 36.0),
-              ///////////////////////
-              // TAGS
-              ///////////////////////
-              if (localListAllTags.isNotEmpty)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: SizedBox(
-                    height: 45.0,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: localListAllTags.length,
-                      itemBuilder: (context, index) => TagWidget(
-                        title: localListAllTags[index].title,
-                        backgroundColor: chosenTagMainScreen == index
-                            ? lightColor
-                            : tagColors[localListAllTags[index].color],
-                        textColor: chosenTagMainScreen == index
-                            ? darkColor
-                            : lightColor,
-                        onTap: () => filterTasks(index),
-                        onLongPress: () => updateDeleteTag(
-                          context: context,
-                          onTap: () async {
-                            await updateTag(context);
-                            setState(() {});
-                          },
-                          deleteTag: () async {
-                            await deleteTag(
-                              context,
-                              localListAllTags[index],
-                            );
-                            setState(() {});
-                          },
-                          tag: localListAllTags[index],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              SizedBox(height: 24.0),
-              Expanded(
-                child: Stack(
-                  children: [
-                    ///////////////////////
-                    // TASKS
-                    ///////////////////////
-                    if (localListFilteredTasks.isNotEmpty)
-                      ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        itemCount: localListFilteredTasks.length,
-                        itemBuilder: (context, index) => TaskWidget(
-                          title: createShortText(
-                            index: index,
-                            shortText: ShortText.title,
-                            numberOfCharacters: 25,
-                          ),
-                          description: createShortText(
-                            index: index,
-                            shortText: ShortText.description,
-                            numberOfCharacters: 40,
-                          ),
-                          color: tagColors[
-                              localListFilteredTasks[index].tag.color],
-                          onTap: () {
-                            setState(() {
-                              // Toggle the 'isDone' state of the tapped task
-                              localListFilteredTasks[index].isDone =
-                                  !localListFilteredTasks[index].isDone;
-                            });
+        // Show loading screen until everything gets loaded
+        child: loadingScreen == true ? Loading() : buildTasksScreen(size),
+      ),
+    );
+  }
 
-                            // Toggle 'isDone' in Firebase
-                            firestore.toggleIsDoneFirebase(
-                                localListFilteredTasks[index]);
-                          },
-                          onLongPress: () => updateDeleteTask(
-                            context: context,
-                            onTap: () async {
-                              await updateTask(context);
-                              setState(() {});
-                            },
-                            deleteTask: () async {
-                              await deleteTask(
-                                context,
-                                localListFilteredTasks[index],
-                              );
-                              setState(() {});
-                            },
-                            task: localListFilteredTasks[index],
-                          ),
-                          icon: localListFilteredTasks[index].isDone
-                              ? checkboxCheckedIcon
-                              : checkboxUncheckedIcon,
-                        ),
-                      ),
-                    ///////////////////////
-                    // ADD TASK FAB
-                    ///////////////////////
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: EdgeInsets.only(bottom: 16.0),
-                      child: FloatingActionButton(
-                        onPressed: () => createTask(
-                          context: context,
-                          onTap: () async {
-                            await addTask(context);
-                            setState(() {});
-                          },
-                        ),
-                        child: SvgPicture.asset(
-                          addIcon,
-                          width: 24.0,
-                          color: darkColor,
-                        ),
-                      ),
-                    ),
-                  ],
+  Widget buildTasksScreen(Size size) {
+    return Column(
+      children: [
+        ///////////////////////
+        // ERRORS
+        ///////////////////////
+
+        // Initialization errors
+        if (myFirebaseError == MyFirebaseError.initialize)
+          MyErrorWidget(firestoreInitializeError),
+        if (myFirebaseError == MyFirebaseError.setDefault)
+          MyErrorWidget(firestoreDefaultValuesError),
+
+        // Name errors
+        if (myFirebaseError == MyFirebaseError.getName)
+          MyErrorWidget(firestoreGettingNameError),
+        if (myFirebaseError == MyFirebaseError.updateName)
+          MyErrorWidget(firestoreUpdatingNameError),
+
+        // Task errors
+        if (myFirebaseError == MyFirebaseError.getTasks)
+          MyErrorWidget(firestoreGettingTasksError),
+        if (myFirebaseError == MyFirebaseError.createTask)
+          MyErrorWidget(firestoreCreatingTaskError),
+        if (myFirebaseError == MyFirebaseError.updateTask)
+          MyErrorWidget(firestoreUpdatingTaskError),
+        if (myFirebaseError == MyFirebaseError.deleteTask)
+          MyErrorWidget(firestoreDeletingTaskError),
+        if (myFirebaseError == MyFirebaseError.toggleTask)
+          MyErrorWidget(firestoreTogglingTaskError),
+
+        // Tag errors
+        if (myFirebaseError == MyFirebaseError.getTags)
+          MyErrorWidget(firestoreGettingTagsError),
+        if (myFirebaseError == MyFirebaseError.createTag)
+          MyErrorWidget(firestoreCreatingTagsError),
+        if (myFirebaseError == MyFirebaseError.updateTag)
+          MyErrorWidget(firestoreUpdatingTagError),
+        if (myFirebaseError == MyFirebaseError.deleteTag)
+          MyErrorWidget(firestoreDeletingTagError),
+
+        ///////////////////////
+        // INFO & TAGS BUTTONS
+        ///////////////////////
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 20.0,
+            vertical: 24.0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  InfoScreen.routeName,
+                ),
+                child: SvgPicture.asset(
+                  infoIcon,
+                  width: 30.0,
+                  color: lightColor,
+                ),
+              ),
+              GestureDetector(
+                // Open modal to create tag
+                onTap: () => createTag(context),
+                child: SvgPicture.asset(
+                  tagIcon,
+                  width: 32.0,
+                  color: lightColor,
                 ),
               ),
             ],
           ),
         ),
-      ),
+
+        ///////////////////////
+        // HEADER TEXT
+        ///////////////////////
+        GestureDetector(
+          onLongPress: () => changeName(context),
+          child: Text(
+            '$helloString $chosenName',
+            textAlign: TextAlign.center,
+            style:
+                Theme.of(context).textTheme.headline1.copyWith(fontSize: 36.0),
+          ),
+        ),
+        Text(
+          '$numberOfTasksFirstString ${localListFilteredTasks.length} $numberOfTasksSecondString',
+          style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 28.0),
+        ),
+        SizedBox(height: 36.0),
+
+        ///////////////////////
+        // TAGS
+        ///////////////////////
+        if (localListAllTags.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: SizedBox(
+              height: 45.0,
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: localListAllTags.length,
+                itemBuilder: (context, index) => TagWidget(
+                  title: localListAllTags[index].title,
+                  backgroundColor: chosenTagMainScreen == index
+                      ? lightColor
+                      : tagColors[localListAllTags[index].color],
+                  textColor:
+                      chosenTagMainScreen == index ? darkColor : lightColor,
+                  onTap: () => filterTasks(index),
+                  onLongPress: () => updateDeleteTag(
+                    context: context,
+                    onTap: () async {
+                      await updateTag(context);
+                      setState(() {});
+                    },
+                    deleteTag: () async {
+                      await deleteTag(
+                        context,
+                        localListAllTags[index],
+                      );
+                      setState(() {});
+                    },
+                    tag: localListAllTags[index],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        SizedBox(height: 24.0),
+        Expanded(
+          child: Stack(
+            children: [
+              // Show random illustration if there are no tasks
+              if (localListFilteredTasks.isEmpty)
+                SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Illustration(illustrationText),
+                      SizedBox(height: 56.0),
+                    ],
+                  ),
+                ),
+
+              ///////////////////////
+              // TASKS
+              ///////////////////////
+              if (localListFilteredTasks.isNotEmpty)
+                ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: localListFilteredTasks.length,
+                  itemBuilder: (context, index) => TaskWidget(
+                    title: createShortText(
+                      index: index,
+                      shortText: ShortText.title,
+                      numberOfCharacters: 25,
+                    ),
+                    description: createShortText(
+                      index: index,
+                      shortText: ShortText.description,
+                      numberOfCharacters: 40,
+                    ),
+                    color: tagColors[localListFilteredTasks[index].tag.color],
+                    onTap: () {
+                      setState(() {
+                        // Toggle the 'isDone' state of the tapped task
+                        localListFilteredTasks[index].isDone =
+                            !localListFilteredTasks[index].isDone;
+                      });
+
+                      // Toggle 'isDone' in Firebase
+                      firestore
+                          .toggleIsDoneFirebase(localListFilteredTasks[index]);
+                    },
+                    onLongPress: () => updateDeleteTask(
+                      context: context,
+                      onTap: () async {
+                        await updateTask(context);
+                        setState(() {});
+                      },
+                      deleteTask: () async {
+                        await deleteTask(
+                          context,
+                          localListFilteredTasks[index],
+                        );
+                        setState(() {});
+                      },
+                      task: localListFilteredTasks[index],
+                    ),
+                    icon: localListFilteredTasks[index].isDone
+                        ? checkboxCheckedIcon
+                        : checkboxUncheckedIcon,
+                  ),
+                ),
+
+              ///////////////////////
+              // ADD TASK FAB
+              ///////////////////////
+              Container(
+                alignment: Alignment.bottomCenter,
+                padding: EdgeInsets.only(bottom: 16.0),
+                child: FloatingActionButton(
+                  onPressed: () => createTask(
+                    context: context,
+                    onTap: () async {
+                      await addTask(context);
+                      setState(() {});
+                    },
+                  ),
+                  child: SvgPicture.asset(
+                    addIcon,
+                    width: 24.0,
+                    color: darkColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

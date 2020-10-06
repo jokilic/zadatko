@@ -1,23 +1,8 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../constants/enums.dart';
 import '../constants/errors.dart';
-
-enum LoginState {
-  loggedIn,
-  userNotFound,
-  wrongPassword,
-  wrongEmail,
-  generalError,
-}
-
-enum SignupState {
-  signedUp,
-  accountExists,
-  weakPassword,
-  wrongEmail,
-  generalError,
-}
 
 LoginState loginState;
 SignupState signupState;
@@ -38,14 +23,17 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         loginState = LoginState.userNotFound;
-        throw (authUserNotFound);
+        print(authUserNotFound);
+        // throw (authUserNotFound);
       } else if (e.code == 'wrong-password') {
         loginState = LoginState.wrongPassword;
-        throw (authPasswordWrong);
+        print(authPasswordWrong);
+        // throw (authPasswordWrong);
       }
     } catch (e) {
       loginState = LoginState.generalError;
-      throw (authLoginError);
+      print(authLoginError);
+      // throw (authLoginError);
     }
   }
 
@@ -62,14 +50,17 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         signupState = SignupState.weakPassword;
-        throw (authPasswordWeak);
+        print(authPasswordWeak);
+        // throw (authPasswordWeak);
       } else if (e.code == 'email-already-in-use') {
         signupState = SignupState.accountExists;
-        throw (authEmailInUse);
+        print(authEmailInUse);
+        // throw (authEmailInUse);
       }
     } catch (e) {
       signupState = SignupState.generalError;
-      throw (authSignupError);
+      print(authSignupError);
+      // throw (authSignupError);
     }
   }
 
@@ -80,7 +71,8 @@ class Auth {
     try {
       await firebaseAuth.signOut();
     } catch (e) {
-      throw (authSignoutError);
+      print(authSignoutError);
+      // throw (authSignoutError);
     }
   }
 }

@@ -54,4 +54,4 @@ const String deleteTaskErrorString = 'Error deleting task.';
 // update_delete_tag.dart
 const String updateTagErrorString = 'Error updating tag.';
 const String deleteTagErrorString = 'Error deleting tag.';
-const String tagUserErrorString = 'Tag is used, remove it from all tasks.';
+const String tagUsedErrorString = 'Tag is used, remove it from all tasks.';

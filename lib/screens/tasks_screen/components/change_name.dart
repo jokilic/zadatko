@@ -42,34 +42,37 @@ void changeName(BuildContext context) {
         ),
         height: size.height * 0.4,
         width: size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              changeNameString,
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline1
-                  .copyWith(fontSize: 36.0),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 24.0,
-                bottom: 42.0,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                changeNameString,
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1
+                    .copyWith(fontSize: 36.0),
               ),
-              child: ZadatkoTextField(
-                hintText: titleFieldHintString,
-                textEditingController: changeNameController,
-                focusNode: changeNameFocusNode,
-                onEditingComplete: () => updateName(),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: 24.0,
+                  bottom: 42.0,
+                ),
+                child: ZadatkoTextField(
+                  hintText: titleFieldHintString,
+                  textEditingController: changeNameController,
+                  focusNode: changeNameFocusNode,
+                  onEditingComplete: () => updateName(),
+                ),
               ),
-            ),
-            ZadatkoButton(
-              text: changeNameButtonString,
-              onTap: () => updateName(),
-            ),
-          ],
+              ZadatkoButton(
+                text: changeNameButtonString,
+                onTap: () => updateName(),
+              ),
+            ],
+          ),
         ),
       ),
     ),

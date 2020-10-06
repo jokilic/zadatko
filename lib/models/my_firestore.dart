@@ -3,34 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import './task.dart';
 import './tag.dart';
-import '../constants/general.dart';
+import '../constants/enums.dart';
 import '../constants/errors.dart';
+import '../constants/general.dart';
 import '../screens/tasks_screen/tasks_screen.dart';
-
-enum Error {
-  no,
-  initialize,
-  setDefault,
-  getName,
-  updateName,
-  getTasks,
-  updateTask,
-  createTask,
-  deleteTask,
-  toggleTask,
-  getTags,
-  updateTag,
-  createTag,
-  deleteTag,
-}
 
 String uid;
 DocumentReference user;
 CollectionReference tasks;
 CollectionReference tags;
 
-// Initialize the 'Error' enum
-Error error = Error.no;
+// Initialize the 'MyFirebaseError' enum
+MyFirebaseError myFirebaseError = MyFirebaseError.no;
 
 class MyFirestore {
   ///////////////////////
@@ -50,22 +34,25 @@ class MyFirestore {
       // Get Tags Collection
       tags = user.collection('tags');
     } catch (e) {
-      error = Error.initialize;
-      throw (firestoreInitializeError);
+      myFirebaseError = MyFirebaseError.initialize;
+      print(firestoreInitializeError);
+      // throw (firestoreInitializeError);
     }
   }
 
   // If the user is logged in for the first time
   Future<void> setDefaultValues() async {
     try {
+      firstStart = false;
       final DocumentSnapshot name = await user.get();
       if (!name.exists) {
         firstStart = true;
         await updateNameFirebase('someone');
       }
     } catch (e) {
-      error = Error.setDefault;
-      throw (firestoreDefaultValuesError);
+      myFirebaseError = MyFirebaseError.setDefault;
+      print(firestoreDefaultValuesError);
+      // throw (firestoreDefaultValuesError);
     }
   }
 
@@ -78,8 +65,10 @@ class MyFirestore {
       String newName = name.data()['name'];
       return newName;
     } catch (e) {
-      error = Error.getName;
-      throw (firestoreGettingNameError);
+      myFirebaseError = MyFirebaseError.getName;
+      print(firestoreGettingNameError);
+      return firestoreGettingNameError;
+      // throw (firestoreGettingNameError);
     }
   }
 
@@ -89,8 +78,9 @@ class MyFirestore {
         'name': name,
       });
     } catch (e) {
-      error = Error.updateName;
-      throw (firestoreUpdatingNameError);
+      myFirebaseError = MyFirebaseError.updateName;
+      print(firestoreUpdatingNameError);
+      // throw (firestoreUpdatingNameError);
     }
   }
 
@@ -124,8 +114,9 @@ class MyFirestore {
       // Create a list used for filtering with all of the values from Firebase
       localListFilteredTasks = localListAllTasks;
     } catch (e) {
-      error = Error.getTasks;
-      throw (firestoreGettingTasksError);
+      myFirebaseError = MyFirebaseError.getTasks;
+      print(firestoreGettingTasksError);
+      // throw (firestoreGettingTasksError);
     }
   }
 
@@ -145,8 +136,9 @@ class MyFirestore {
     try {
       await tasks.doc(taskMap['title']).set(taskMap);
     } catch (e) {
-      error = Error.createTask;
-      throw (firestoreCreatingTaskError);
+      myFirebaseError = MyFirebaseError.createTask;
+      print(firestoreCreatingTaskError);
+      // throw (firestoreCreatingTaskError);
     }
   }
 
@@ -159,8 +151,9 @@ class MyFirestore {
       // Create the new task
       createTaskFirebase(newTask);
     } catch (e) {
-      error = Error.updateTask;
-      throw (firestoreUpdatingTaskError);
+      myFirebaseError = MyFirebaseError.updateTask;
+      print(firestoreUpdatingTaskError);
+      // throw (firestoreUpdatingTaskError);
     }
   }
 
@@ -168,8 +161,9 @@ class MyFirestore {
     try {
       await tasks.doc(task.title).delete();
     } catch (e) {
-      error = Error.deleteTask;
-      throw (firestoreDeletingTaskError);
+      myFirebaseError = MyFirebaseError.deleteTask;
+      print(firestoreDeletingTaskError);
+      // throw (firestoreDeletingTaskError);
     }
   }
 
@@ -180,8 +174,9 @@ class MyFirestore {
         'isDone': task.isDone,
       });
     } catch (e) {
-      error = Error.toggleTask;
-      throw (firestoreTogglingTaskError);
+      myFirebaseError = MyFirebaseError.toggleTask;
+      print(firestoreTogglingTaskError);
+      // throw (firestoreTogglingTaskError);
     }
   }
 
@@ -207,8 +202,9 @@ class MyFirestore {
         },
       );
     } catch (e) {
-      error = Error.getTags;
-      throw (firestoreGettingTagsError);
+      myFirebaseError = MyFirebaseError.getTags;
+      print(firestoreGettingTagsError);
+      // throw (firestoreGettingTagsError);
     }
   }
 
@@ -219,8 +215,9 @@ class MyFirestore {
         'color': tag.color,
       });
     } catch (e) {
-      error = Error.createTag;
-      throw (firestoreCreatingTagsError);
+      myFirebaseError = MyFirebaseError.createTag;
+      print(firestoreCreatingTagsError);
+      // throw (firestoreCreatingTagsError);
     }
   }
 
@@ -232,8 +229,9 @@ class MyFirestore {
       // Create the new tag
       createTagFirebase(newTag);
     } catch (e) {
-      error = Error.updateTag;
-      throw (firestoreUpdatingTagError);
+      myFirebaseError = MyFirebaseError.updateTag;
+      print(firestoreUpdatingTagError);
+      // throw (firestoreUpdatingTagError);
     }
   }
 
@@ -241,8 +239,9 @@ class MyFirestore {
     try {
       await tags.doc(tag.title).delete();
     } catch (e) {
-      error = Error.deleteTag;
-      throw (firestoreDeletingTagError);
+      myFirebaseError = MyFirebaseError.deleteTag;
+      print(firestoreDeletingTagError);
+      // throw (firestoreDeletingTagError);
     }
   }
 }

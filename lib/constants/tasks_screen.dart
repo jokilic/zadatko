@@ -39,3 +39,6 @@ const String updateTagNameHintString = 'Title';
 const String updateTagValidationFailedString = 'Tag title is not good.';
 const String updateTagButtonString = 'Update tag';
 const String deleteTagButtonString = 'Delete tag';
+
+// illustration.dart
+const String illustrationText = 'No tasks?\nEnjoy the rest of your day!';

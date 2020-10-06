@@ -1,3 +1,5 @@
+import 'dart:math';
+
 ///////////////////////
 // ILLUSTRATIONS
 ///////////////////////
@@ -19,3 +21,7 @@ const List<String> illustrations = [
   welcomeIllustration,
   yogaIllustration,
 ];
+
+// Get an illustration to show on the StartScreen
+String get getRandomIllustration =>
+    illustrations[Random().nextInt(illustrations.length)];

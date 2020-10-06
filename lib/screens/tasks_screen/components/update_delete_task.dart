@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
+import '../../../constants/enums.dart';
 import '../../../constants/errors.dart';
 import '../../../constants/general.dart';
 import '../../../constants/tasks_screen.dart';
@@ -8,6 +9,7 @@ import './tag_widget.dart';
 import '../tasks_screen.dart';
 import '../../../components/zadatko_text_field.dart';
 import '../../../components/zadatko_button.dart';
+import '../../../components/my_error_widget.dart';
 import '../../../models/tag.dart';
 import '../../../models/task.dart';
 
@@ -20,6 +22,9 @@ int chosenTagModal;
 double taskModalHeightPercentage;
 Task oldTask;
 
+// Initialize the 'UpdateDeleteTaskError' enum
+UpdateDeleteTaskError updateDeleteTaskError = UpdateDeleteTaskError.no;
+
 // Gets called when the user presses the 'Update task' button
 Future<void> updateTask(BuildContext context) async {
   try {
@@ -28,7 +33,9 @@ Future<void> updateTask(BuildContext context) async {
     // Validation fails if the title text is empty
     if (titleController.text.isEmpty) {
       taskModalValidation = false;
-      throw (taskTitleEmptyErrorString);
+      updateDeleteTaskError = UpdateDeleteTaskError.titleEmpty;
+      print(taskTitleEmptyErrorString);
+      // throw (taskTitleEmptyErrorString);
     }
     // Validation fails if the task title is the same as any already created task title
     // And if the new title is not the same as the old title
@@ -36,7 +43,9 @@ Future<void> updateTask(BuildContext context) async {
       if (titleController.text == task.title) {
         if (titleController.text != oldTask.title) {
           taskModalValidation = false;
-          throw (taskSameNameErrorString);
+          updateDeleteTaskError = UpdateDeleteTaskError.titleSame;
+          print(taskSameNameErrorString);
+          // throw (taskSameNameErrorString);
         }
       }
     });
@@ -63,7 +72,9 @@ Future<void> updateTask(BuildContext context) async {
       Navigator.pop(context);
     }
   } catch (e) {
-    throw (updateTaskErrorString);
+    updateDeleteTaskError = UpdateDeleteTaskError.updateError;
+    print(updateTaskErrorString);
+    // throw (updateTaskErrorString);
   }
 }
 
@@ -75,7 +86,9 @@ Future<void> deleteTask(BuildContext context, Task task) async {
 
     Navigator.pop(context);
   } catch (e) {
-    throw (deleteTaskErrorString);
+    updateDeleteTaskError = UpdateDeleteTaskError.deleteError;
+    print(deleteTaskErrorString);
+    // throw (deleteTaskErrorString);
   }
 }
 
@@ -87,6 +100,8 @@ void updateDeleteTask({
   @required Task task,
 }) {
   Size size = MediaQuery.of(context).size;
+
+  updateDeleteTaskError = UpdateDeleteTaskError.no;
 
   // Save original task
   oldTask = task;
@@ -121,77 +136,103 @@ void updateDeleteTask({
           ),
           height: size.height * taskModalHeightPercentage,
           width: size.width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                updateTaskTitleString,
-                textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1
-                    .copyWith(fontSize: 36.0),
-              ),
-              ZadatkoTextField(
-                hintText: updateTaskNameHintString,
-                textEditingController: titleController,
-                focusNode: titleFocusNode,
-                onEditingComplete: () =>
-                    FocusScope.of(context).requestFocus(descriptionFocusNode),
-              ),
-              ZadatkoTextField(
-                hintText: updateTaskDescriptionHintString,
-                textEditingController: descriptionController,
-                focusNode: descriptionFocusNode,
-                onEditingComplete: onTap,
-              ),
-              SizedBox(height: 8.0),
-              if (localListAllTags.length > 0)
-                SizedBox(
-                  height: 50.0,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: localListAllTags.length,
-                    itemBuilder: (context, index) => TagWidget(
-                      title: localListAllTags[index].title,
-                      backgroundColor: chosenTagModal == index
-                          ? lightColor
-                          : tagColors[localListAllTags[index].color],
-                      textColor:
-                          chosenTagModal == index ? darkColor : lightColor,
-                      onTap: () {
-                        setTaskModalState(() {
-                          chosenTagModal == index
-                              ? chosenTagModal = null
-                              : chosenTagModal = index;
-                        });
-                      },
-                      onLongPress: null,
-                    ),
-                  ),
-                ),
-              SizedBox(height: 8.0),
-              if (taskModalValidation == false)
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 Text(
-                  updateTaskValidationFailedString,
+                  updateTaskTitleString,
+                  textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
                       .headline1
-                      .copyWith(fontSize: 26.0),
+                      .copyWith(fontSize: 36.0),
                 ),
-              SizedBox(height: 8.0),
-              ZadatkoButton(
-                text: updateTaskButtonString,
-                onTap: onTap,
-              ),
-              SizedBox(height: 8.0),
-              ZadatkoButton(
-                text: deleteTaskButtonString,
-                onTap: deleteTask,
-              ),
-            ],
+                SizedBox(height: 24.0),
+                ZadatkoTextField(
+                  hintText: updateTaskNameHintString,
+                  textEditingController: titleController,
+                  focusNode: titleFocusNode,
+                  onEditingComplete: () =>
+                      FocusScope.of(context).requestFocus(descriptionFocusNode),
+                ),
+                SizedBox(height: 16.0),
+                ZadatkoTextField(
+                  hintText: updateTaskDescriptionHintString,
+                  textEditingController: descriptionController,
+                  focusNode: descriptionFocusNode,
+                  onEditingComplete: null,
+                  maxLines: null,
+                ),
+                SizedBox(height: 32.0),
+                if (localListAllTags.length > 0)
+                  SizedBox(
+                    height: 50.0,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: localListAllTags.length,
+                      itemBuilder: (context, index) => TagWidget(
+                        title: localListAllTags[index].title,
+                        backgroundColor: chosenTagModal == index
+                            ? lightColor
+                            : tagColors[localListAllTags[index].color],
+                        textColor:
+                            chosenTagModal == index ? darkColor : lightColor,
+                        onTap: () {
+                          setTaskModalState(() {
+                            chosenTagModal == index
+                                ? chosenTagModal = null
+                                : chosenTagModal = index;
+                          });
+                        },
+                        onLongPress: null,
+                      ),
+                    ),
+                  ),
+                SizedBox(height: 16.0),
+                if (updateDeleteTaskError == UpdateDeleteTaskError.titleEmpty)
+                  Column(
+                    children: [
+                      MyErrorWidget(taskTitleEmptyErrorString),
+                      SizedBox(height: 16.0),
+                    ],
+                  ),
+                if (updateDeleteTaskError == UpdateDeleteTaskError.titleSame)
+                  Column(
+                    children: [
+                      MyErrorWidget(taskSameNameErrorString),
+                      SizedBox(height: 16.0),
+                    ],
+                  ),
+                if (updateDeleteTaskError == UpdateDeleteTaskError.updateError)
+                  Column(
+                    children: [
+                      MyErrorWidget(updateTaskErrorString),
+                      SizedBox(height: 16.0),
+                    ],
+                  ),
+                if (updateDeleteTaskError == UpdateDeleteTaskError.deleteError)
+                  Column(
+                    children: [
+                      MyErrorWidget(deleteTaskErrorString),
+                      SizedBox(height: 16.0),
+                    ],
+                  ),
+                SizedBox(height: 16.0),
+                ZadatkoButton(
+                  text: updateTaskButtonString,
+                  onTap: onTap,
+                ),
+                SizedBox(height: 16.0),
+                ZadatkoButton(
+                  text: deleteTaskButtonString,
+                  onTap: deleteTask,
+                ),
+              ],
+            ),
           ),
         ),
       ),

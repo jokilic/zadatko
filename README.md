@@ -17,21 +17,26 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 - [x] Adding tags
 - [x] Linking tags & tasks
 - [x] Showing tasks by linked tab
-- [x] `isDone` functionality
+- [x] *Task is done* functionality
+- [x] Updating tags & tasks functionality
+- [x] Deleting tags & tasks functionality
 
 ### What is planned?
 
 **General work**
 
+- [ ] Research & update Firestore Security Rules
 - [ ] Generate new colors for the tags
 - [ ] Create icon for the app
 - [ ] Create screenshots for the Play Store
-- [ ] Build first production version of the app
+- [ ] Sign & build first production version of the app
+- [x] Test on multiple screens and make modifications where needed
+- [x] Implement `Error` enums & error messages
+- [x] Multi-line description field
 - [x] Refactor code & write comments where needed
 - [x] Check all imports - They have to be relative
 - [x] Remove all `print` statements
-- [x] Create multiple files for the Strings - Break up `constants.dart`
-- [x] Refactor `constants.dart`
+- [x] Refactor `constants.dart` into multiple files
 - [x] All strings go in `constants.dart`
 - [x] Implement `isDone` functionality
 - [x] Easier method of linking tags to tasks
@@ -43,8 +48,6 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 
 **my_firestore.dart**
 
-- [ ] Implement `Error` enum
-- [ ] Implement `SnackBar()` for each potential error
 - [x] Implement `updateTagFirebase()`
 - [x] Implement `deleteTagFirebase()`
 - [x] Implement `updateTaskFirebase()`
@@ -54,16 +57,13 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 **info_screen.dart**
 
 - [ ] Implement `InfoScreen()`
-
-**empty_tasks.dart**
-
-- [ ] Implement illustration and some message
+- [ ] Put **Sign-out** button on the bottom
 
 **tasks_screen.dart**
 
-- [ ] Loading screen until everything gets loaded
-- [ ] If there are no tasks, show some screen with illustration and message
-- [ ] Put **Sign-out** button somewhere
+- [x] Shorten description text if it has multiple lines
+- [x] Loading screen until everything gets loaded
+- [x] If there are no tasks, show some screen with illustration and message
 
 ## Quick screenshots
 
