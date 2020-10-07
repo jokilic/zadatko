@@ -61,7 +61,10 @@ class _TasksScreenState extends State<TasksScreen> {
       await firestore.getTasksFirebase();
 
       // If there is no name (first time logged in), open 'changeName' Modal
-      if (firstStart == true) changeName(context);
+      if (firstStart == true) {
+        changeName(context);
+        firstStart = false;
+      }
 
       loadingScreen = false;
 
@@ -193,7 +196,13 @@ class _TasksScreenState extends State<TasksScreen> {
               ),
               GestureDetector(
                 // Open modal to create tag
-                onTap: () => createTag(context),
+                onTap: () => createTag(
+                  context: context,
+                  onTap: () async {
+                    await addTag(context);
+                    setState(() {});
+                  },
+                ),
                 child: SvgPicture.asset(
                   tagIcon,
                   width: 32.0,
@@ -294,7 +303,7 @@ class _TasksScreenState extends State<TasksScreen> {
                     description: createShortText(
                       index: index,
                       shortText: ShortText.description,
-                      numberOfCharacters: 40,
+                      numberOfCharacters: 50,
                     ),
                     color: tagColors[localListFilteredTasks[index].tag.color],
                     onTap: () {

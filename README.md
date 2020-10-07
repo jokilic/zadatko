@@ -1,12 +1,39 @@
-# Zadatko
+![Header](https://raw.githubusercontent.com/jokilic/zadatko/master/screenshots/header.png)
 
-**Zadatko** will be a simple application that offers the users to write their tasks, check them off, add tags on them and possibly more funcionality.
+# Zadatko 📋
 
-I'm creating it with **Flutter** & **Firebase**.
-The users will need to login using their email & password.
-Tasks will be stored in the cloud and they will be safe, even if the app gets uninstalled.
+📋 **Zadatko** is a simple task management application written in **Flutter**.
 
-I'm making this app because I want to work with **Flutter** & **Firebase**.
+### Signup/Login
+
+Tasks are stored in a **Firebase** database.
+When first opening the app, you will sign-up with an email & password so the tasks are linked with your account.
+If you throw your phone in the water or simply decide to get a new one, tasks will always wait for you to check them off.
+Just login with your credentials and get to working.
+
+### Tags
+
+Tasks can be linked with tags so you can group everything together.
+You can create a tag and put a fancy color on it.
+That way, tasks are much easier to handle and get done in a timely manner.
+
+### Update
+
+Tasks and tags can both be updated after they've been created.
+Just hold the task or tag and modify anything your heart desires.
+Everything gets seamlessly updated in the database.
+
+### Delete
+
+When you're done with the task, you can check it off or you can delete it altogether.
+Everything is flexible and easy to use.
+
+**Thank you for using my task management app.**
+
+### Zadatko can be downloaded from [HERE](https://play.google.com/store/apps/details?id=com.josipkilic.zadatko).
+&nbsp;
+
+![Multi](https://raw.githubusercontent.com/jokilic/zadatko/master/screenshots/multi.png)
 
 ## Current state of the app
 
@@ -25,11 +52,12 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 
 **General work**
 
-- [ ] Research & update Firestore Security Rules
-- [ ] Generate new colors for the tags
-- [ ] Create icon for the app
-- [ ] Create screenshots for the Play Store
 - [ ] Sign & build first production version of the app
+- [x] Create proper Readme file
+- [x] Create screenshots for the Play Store
+- [x] Create icon for the app
+- [x] Generate new colors for the tags
+- [x] Research & update Firestore Security Rules
 - [x] Test on multiple screens and make modifications where needed
 - [x] Implement `Error` enums & error messages
 - [x] Multi-line description field
@@ -56,8 +84,8 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 
 **info_screen.dart**
 
-- [ ] Implement `InfoScreen()`
-- [ ] Put **Sign-out** button on the bottom
+- [x] Implement `InfoScreen()`
+- [x] Put **Sign-out** button on the bottom
 
 **tasks_screen.dart**
 
@@ -65,6 +93,6 @@ I'm making this app because I want to work with **Flutter** & **Firebase**.
 - [x] Loading screen until everything gets loaded
 - [x] If there are no tasks, show some screen with illustration and message
 
-## Quick screenshots
+**zadatko_button.dart**
 
-![Screenshot](https://raw.githubusercontent.com/jokilic/zadatko/master/screenshots/screenshot.png)
+- [x] Implement possibility to put red border color on the button

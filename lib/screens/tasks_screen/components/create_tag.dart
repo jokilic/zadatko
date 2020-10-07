@@ -14,65 +14,72 @@ import '../../../models/tag.dart';
 import '../../../models/my_firestore.dart';
 
 double tagModalHeightPercentage;
+TextEditingController titleController;
+FocusNode titleFocusNode;
+bool tagModalValidation;
+CreateTagError createTagError;
+
+// Gets called when the user presses the 'Create tag' button
+Future<void> addTag(BuildContext context) async {
+  try {
+    tagModalValidation = true;
+
+    // Validation fails if the tag text is empty
+    if (titleController.text.isEmpty) {
+      tagModalValidation = false;
+      tagModalHeightPercentage = 0.55;
+      createTagError = CreateTagError.titleEmpty;
+      print(tagTitleEmptyErrorString);
+      // throw (tagTitleEmptyErrorString);
+    }
+
+    // Validation fails if the tag title is the same as any already created tag title
+    localListAllTags.forEach((tag) {
+      if (titleController.text == tag.title) {
+        tagModalValidation = false;
+        tagModalHeightPercentage = 0.55;
+        createTagError = CreateTagError.titleSame;
+        print(tagSameNameErrorString);
+        // throw (tagSameNameErrorString);
+      }
+    });
+
+    // Tag gets created
+    if (tagModalValidation == true) {
+      await firestore.createTagFirebase(
+        Tag(
+          title: titleController.text.trim(),
+          color: chosenColor ?? 0,
+        ),
+      );
+
+      await firestore.getTagsFirebase();
+
+      Navigator.pop(context);
+    }
+  } catch (e) {
+    myFirebaseError = MyFirebaseError.createTag;
+    tagModalHeightPercentage = 0.55;
+    createTagError = CreateTagError.generalError;
+    print(createTagErrorString);
+    // throw (createTagErrorString);
+  }
+}
 
 // Modal that is shown when the user taps the Tag icon
-void createTag(BuildContext context) {
+void createTag({
+  @required BuildContext context,
+  @required Function onTap,
+}) {
   myFirebaseError = MyFirebaseError.no;
   chosenColor = null;
-  TextEditingController titleController = TextEditingController();
-  FocusNode titleFocusNode = FocusNode();
-  tagModalHeightPercentage = 0.5;
-  bool tagModalValidation = true;
+  titleController = TextEditingController();
+  titleFocusNode = FocusNode();
+  tagModalHeightPercentage = 0.45;
+  tagModalValidation = true;
 
   // Initialize the 'CreateTagError' enum
-  CreateTagError createTagError = CreateTagError.no;
-
-  // Gets called when the user presses the 'Create tag' button
-  Future<void> addTag() async {
-    try {
-      tagModalValidation = true;
-
-      // Validation fails if the tag text is empty
-      if (titleController.text.isEmpty) {
-        tagModalValidation = false;
-        tagModalHeightPercentage = 0.6;
-        createTagError = CreateTagError.titleEmpty;
-        print(tagTitleEmptyErrorString);
-        // throw (tagTitleEmptyErrorString);
-      }
-
-      // Validation fails if the tag title is the same as any already created tag title
-      localListAllTags.forEach((tag) {
-        if (titleController.text == tag.title) {
-          tagModalValidation = false;
-          tagModalHeightPercentage = 0.6;
-          createTagError = CreateTagError.titleSame;
-          print(tagSameNameErrorString);
-          // throw (tagSameNameErrorString);
-        }
-      });
-
-      // Tag gets created
-      if (tagModalValidation == true) {
-        await firestore.createTagFirebase(
-          Tag(
-            title: titleController.text.trim(),
-            color: chosenColor ?? 0,
-          ),
-        );
-
-        await firestore.getTagsFirebase();
-
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      myFirebaseError = MyFirebaseError.createTag;
-      tagModalHeightPercentage = 0.6;
-      createTagError = CreateTagError.generalError;
-      print(createTagErrorString);
-      // throw (createTagErrorString);
-    }
-  }
+  createTagError = CreateTagError.no;
 
   Size size = MediaQuery.of(context).size;
 
@@ -115,42 +122,21 @@ void createTag(BuildContext context) {
                   hintText: tagNameHintString,
                   textEditingController: titleController,
                   focusNode: titleFocusNode,
-                  onEditingComplete: () async {
-                    await addTag();
-                    setTagModalState(() {});
-                  },
+                  onEditingComplete: onTap,
                 ),
                 SizedBox(height: 36.0),
                 ColorPicker(),
-                SizedBox(height: 36.0),
+                SizedBox(height: 24.0),
                 if (createTagError == CreateTagError.titleEmpty)
-                  Column(
-                    children: [
-                      MyErrorWidget(tagTitleEmptyErrorString),
-                      SizedBox(height: 36.0),
-                    ],
-                  ),
+                  MyErrorWidget(tagTitleEmptyErrorString),
                 if (createTagError == CreateTagError.titleSame)
-                  Column(
-                    children: [
-                      MyErrorWidget(tagSameNameErrorString),
-                      SizedBox(height: 36.0),
-                    ],
-                  ),
+                  MyErrorWidget(tagSameNameErrorString),
                 if (createTagError == CreateTagError.generalError)
-                  Column(
-                    children: [
-                      MyErrorWidget(createTagErrorString),
-                      SizedBox(height: 36.0),
-                    ],
-                  ),
-                SizedBox(height: 36.0),
+                  MyErrorWidget(createTagErrorString),
+                SizedBox(height: 24.0),
                 ZadatkoButton(
                   text: addTagButtonString,
-                  onTap: () async {
-                    await addTag();
-                    setTagModalState(() {});
-                  },
+                  onTap: onTap,
                 ),
               ],
             ),

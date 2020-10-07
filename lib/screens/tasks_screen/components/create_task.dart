@@ -57,7 +57,7 @@ Future<void> addTask(BuildContext context) async {
                 ? 'no_tag'
                 : localListAllTags[chosenTagModal].title,
             color: chosenTagModal == null
-                ? 9
+                ? 10
                 : localListAllTags[chosenTagModal].color,
           ),
           isDone: false,
@@ -140,6 +140,7 @@ void createTask({
                   focusNode: descriptionFocusNode,
                   onEditingComplete: null,
                   maxLines: null,
+                  textInputType: TextInputType.multiline,
                 ),
                 SizedBox(height: 32.0),
                 if (localListAllTags.length > 0)

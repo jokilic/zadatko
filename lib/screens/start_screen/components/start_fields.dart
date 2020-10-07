@@ -55,6 +55,8 @@ class StartFields extends StatelessWidget {
             focusNode: emailFocusNode,
             onEditingComplete: emailOnEditingComplete,
             textEditingController: emailController,
+            textCapitalization: TextCapitalization.none,
+            textInputType: TextInputType.emailAddress,
           ),
           SizedBox(height: 24.0),
           ZadatkoTextField(
@@ -63,6 +65,8 @@ class StartFields extends StatelessWidget {
             onEditingComplete: passwordOnEditingComplete,
             isObscureText: true,
             textEditingController: passwordController,
+            textCapitalization: TextCapitalization.none,
+            textInputType: TextInputType.visiblePassword,
           ),
           SizedBox(height: 20.0),
           Text(

@@ -11,6 +11,7 @@ import '../../models/validation.dart';
 import './components/start_fields.dart';
 import './components/build_start_buttons.dart';
 import '../../components/hero_section.dart';
+import '../tasks_screen/tasks_screen.dart';
 
 bool isLoading = false;
 StartFieldsState startFieldsState = StartFieldsState.start;
@@ -108,9 +109,15 @@ class _StartScreenState extends State<StartScreen> {
 
     generateLoginErrorText();
     isLoading = false;
+
+    if (loginState == LoginState.loggedIn)
+      Navigator.pushNamed(
+        context,
+        TasksScreen.routeName,
+      );
   }
 
-  // Gets called when the user presses the Login button
+  // Gets called when the user presses the Signup button
   Future<void> signup() async {
     FocusScope.of(context).unfocus();
     setState(() {});
@@ -126,6 +133,11 @@ class _StartScreenState extends State<StartScreen> {
 
     generateSignupErrorText();
     isLoading = false;
+    if (signupState == SignupState.signedUp)
+      Navigator.pushNamed(
+        context,
+        TasksScreen.routeName,
+      );
   }
 
   @override

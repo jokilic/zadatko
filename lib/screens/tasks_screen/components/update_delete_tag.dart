@@ -50,7 +50,7 @@ Future<void> updateTag(BuildContext context) async {
     if (tagModalValidation == true) {
       Tag newTag = Tag(
         title: titleController.text.trim(),
-        color: chosenColor == null ? 9 : chosenColor,
+        color: chosenColor == null ? 10 : chosenColor,
       );
 
       await firestore.updateTagFirebase(oldTag, newTag);
@@ -105,10 +105,10 @@ void updateDeleteTag({
 
   titleController.text = tag.title;
   titleFocusNode = FocusNode();
-  tagModalHeightPercentage = 0.5;
+  tagModalHeightPercentage = 0.45;
   tagModalValidation = true;
 
-  if (localListAllTags.length > 0) tagModalHeightPercentage = 0.6;
+  if (localListAllTags.length > 0) tagModalHeightPercentage = 0.55;
 
   showModalBottomSheet(
     isScrollControlled: true,
@@ -137,7 +137,7 @@ void updateDeleteTag({
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  addTagString,
+                  updateTitleString,
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
@@ -194,10 +194,11 @@ void updateDeleteTag({
                   text: updateTagButtonString,
                   onTap: onTap,
                 ),
-                SizedBox(height: 24.0),
+                SizedBox(height: 16.0),
                 ZadatkoButton(
                   text: deleteTagButtonString,
                   onTap: deleteTag,
+                  color: redColor,
                 ),
               ],
             ),

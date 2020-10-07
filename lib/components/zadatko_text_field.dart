@@ -10,6 +10,8 @@ class ZadatkoTextField extends StatelessWidget {
   final FocusNode focusNode;
   final Function onEditingComplete;
   final int maxLines;
+  final TextCapitalization textCapitalization;
+  final TextInputType textInputType;
 
   ZadatkoTextField({
     @required this.hintText,
@@ -18,6 +20,8 @@ class ZadatkoTextField extends StatelessWidget {
     @required this.focusNode,
     @required this.onEditingComplete,
     this.maxLines = 1,
+    this.textCapitalization = TextCapitalization.sentences,
+    this.textInputType = TextInputType.text,
   });
 
   @override
@@ -29,7 +33,8 @@ class ZadatkoTextField extends StatelessWidget {
       child: Column(
         children: [
           TextField(
-            textCapitalization: TextCapitalization.sentences,
+            textCapitalization: textCapitalization,
+            keyboardType: textInputType,
             maxLines: maxLines,
             controller: textEditingController,
             obscureText: isObscureText,

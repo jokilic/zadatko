@@ -6,10 +6,12 @@ import '../constants/colors.dart';
 class ZadatkoButton extends StatelessWidget {
   final String text;
   final Function onTap;
+  final Color color;
 
   ZadatkoButton({
     @required this.text,
     @required this.onTap,
+    this.color = lightColor,
   });
 
   @override
@@ -21,13 +23,13 @@ class ZadatkoButton extends StatelessWidget {
       ),
       child: Text(
         text.toUpperCase(),
-        style: Theme.of(context).textTheme.button,
+        style: Theme.of(context).textTheme.button.copyWith(color: color),
       ),
       onPressed: onTap,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
         side: BorderSide(
-          color: lightColor,
+          color: color,
           width: 3,
         ),
       ),

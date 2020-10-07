@@ -110,10 +110,10 @@ void updateDeleteTask({
   descriptionController.text = task.description;
   titleFocusNode = FocusNode();
   descriptionFocusNode = FocusNode();
-  taskModalHeightPercentage = 0.6;
+  taskModalHeightPercentage = 0.5;
   taskModalValidation = true;
 
-  if (localListAllTags.length > 0) taskModalHeightPercentage = 0.7;
+  if (localListAllTags.length > 0) taskModalHeightPercentage = 0.6;
 
   showModalBottomSheet(
     isScrollControlled: true,
@@ -164,6 +164,7 @@ void updateDeleteTask({
                   focusNode: descriptionFocusNode,
                   onEditingComplete: null,
                   maxLines: null,
+                  textInputType: TextInputType.multiline,
                 ),
                 SizedBox(height: 32.0),
                 if (localListAllTags.length > 0)
@@ -230,6 +231,7 @@ void updateDeleteTask({
                 ZadatkoButton(
                   text: deleteTaskButtonString,
                   onTap: deleteTask,
+                  color: redColor,
                 ),
               ],
             ),

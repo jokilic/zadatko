@@ -25,7 +25,6 @@ ThemeData theme() {
         fontSize: 24.0,
       ),
       button: TextStyle(
-        color: lightColor,
         fontSize: 18.0,
         fontWeight: FontWeight.w700,
         letterSpacing: 10,

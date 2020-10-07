@@ -41,4 +41,4 @@ const String updateTagButtonString = 'Update tag';
 const String deleteTagButtonString = 'Delete tag';
 
 // illustration.dart
-const String illustrationText = 'No tasks?\nEnjoy the rest of your day!';
+const String illustrationText = 'No tasks here?\nEnjoy the rest of your day!';
