@@ -6,26 +6,26 @@
 
 ### Signup/Login
 
-Tasks are stored in a **Firebase** database.
-When first opening the app, you will sign-up with an email & password so the tasks are linked with your account.
-If you throw your phone in the water or simply decide to get a new one, tasks will always wait for you to check them off.
+Tasks are stored in a **Firebase** database.\
+When first opening the app, you will sign-up with an email & password so the tasks are linked with your account.\
+If you throw your phone in the water or simply decide to get a new one, tasks will always wait for you to check them off.\
 Just login with your credentials and get to working.
 
 ### Tags
 
-Tasks can be linked with tags so you can group everything together.
-You can create a tag and put a fancy color on it.
+Tasks can be linked with tags so you can group everything together.\
+You can create a tag and put a fancy color on it.\
 That way, tasks are much easier to handle and get done in a timely manner.
 
 ### Update
 
-Tasks and tags can both be updated after they've been created.
-Just hold the task or tag and modify anything your heart desires.
+Tasks and tags can both be updated after they've been created.\
+Just hold the task or tag and modify anything your heart desires.\
 Everything gets seamlessly updated in the database.
 
 ### Delete
 
-When you're done with the task, you can check it off or you can delete it altogether.
+When you're done with the task, you can check it off or you can delete it altogether.\
 Everything is flexible and easy to use.
 
 **Thank you for using my task management app.**
@@ -52,7 +52,7 @@ Everything is flexible and easy to use.
 
 **General work**
 
-- [ ] Sign & build first production version of the app
+- [x] Sign & build first production version of the app
 - [x] Create proper Readme file
 - [x] Create screenshots for the Play Store
 - [x] Create icon for the app
