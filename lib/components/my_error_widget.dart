@@ -11,7 +11,7 @@ class MyErrorWidget extends StatelessWidget {
       child: Text(
         errorText,
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 28.0),
+        style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 28.0),
       ),
     );
   }

@@ -17,7 +17,7 @@ class Loading extends StatelessWidget {
         Illustration(''),
         Text(
           'Please wait one moment.',
-          style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 30.0),
+          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 30.0),
         ),
         SizedBox(height: 24.0),
         SpinKitFadingCircle(

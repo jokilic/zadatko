@@ -13,13 +13,13 @@ import '../../../components/my_error_widget.dart';
 import '../../../models/tag.dart';
 import '../../../models/task.dart';
 
-TextEditingController titleController;
-TextEditingController descriptionController;
-FocusNode titleFocusNode;
-FocusNode descriptionFocusNode;
-double taskModalHeightPercentage;
-bool taskModalValidation;
-int chosenTagModal;
+TextEditingController? titleController;
+TextEditingController? descriptionController;
+FocusNode? titleFocusNode;
+FocusNode? descriptionFocusNode;
+late double taskModalHeightPercentage;
+bool? taskModalValidation;
+int? chosenTagModal;
 
 // Initialize the 'CreateTaskError' enum
 CreateTaskError createTaskError = CreateTaskError.no;
@@ -30,7 +30,7 @@ Future<void> addTask(BuildContext context) async {
     taskModalValidation = true;
 
     // Validation fails if the title text is empty
-    if (titleController.text.isEmpty) {
+    if (titleController!.text.isEmpty) {
       taskModalValidation = false;
       createTaskError = CreateTaskError.titleEmpty;
       print(taskTitleEmptyErrorString);
@@ -38,7 +38,7 @@ Future<void> addTask(BuildContext context) async {
     }
     // Validation fails if the task title is the same as any already created task title
     localListAllTasks.forEach((task) {
-      if (titleController.text == task.title) {
+      if (titleController!.text == task.title) {
         taskModalValidation = false;
         createTaskError = CreateTaskError.titleSame;
         print(taskSameNameErrorString);
@@ -50,15 +50,15 @@ Future<void> addTask(BuildContext context) async {
     if (taskModalValidation == true) {
       await firestore.createTaskFirebase(
         Task(
-          title: titleController.text.trim(),
-          description: descriptionController.text.trim(),
+          title: titleController!.text.trim(),
+          description: descriptionController!.text.trim(),
           tag: Tag(
             title: chosenTagModal == null
                 ? 'no_tag'
-                : localListAllTags[chosenTagModal].title,
+                : localListAllTags[chosenTagModal!].title,
             color: chosenTagModal == null
                 ? 10
-                : localListAllTags[chosenTagModal].color,
+                : localListAllTags[chosenTagModal!].color,
           ),
           isDone: false,
         ),
@@ -76,8 +76,8 @@ Future<void> addTask(BuildContext context) async {
 
 // Modal that is shown when the user taps the FAB
 void createTask({
-  @required BuildContext context,
-  @required Function onTap,
+  required BuildContext context,
+  required Function onTap,
 }) {
   Size size = MediaQuery.of(context).size;
 
@@ -122,7 +122,7 @@ void createTask({
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
-                      .headline1
+                      .headline1!
                       .copyWith(fontSize: 36.0),
                 ),
                 SizedBox(height: 24.0),
@@ -155,7 +155,7 @@ void createTask({
                         title: localListAllTags[index].title,
                         backgroundColor: chosenTagModal == index
                             ? lightColor
-                            : tagColors[localListAllTags[index].color],
+                            : tagColors[localListAllTags[index].color!],
                         textColor:
                             chosenTagModal == index ? darkColor : lightColor,
                         onTap: () {

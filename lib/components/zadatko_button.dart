@@ -9,8 +9,8 @@ class ZadatkoButton extends StatelessWidget {
   final Color color;
 
   ZadatkoButton({
-    @required this.text,
-    @required this.onTap,
+    required this.text,
+    required this.onTap,
     this.color = lightColor,
   });
 
@@ -23,9 +23,9 @@ class ZadatkoButton extends StatelessWidget {
       ),
       child: Text(
         text.toUpperCase(),
-        style: Theme.of(context).textTheme.button.copyWith(color: color),
+        style: Theme.of(context).textTheme.button!.copyWith(color: color),
       ),
-      onPressed: onTap,
+      onPressed: onTap as void Function()?,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
         side: BorderSide(

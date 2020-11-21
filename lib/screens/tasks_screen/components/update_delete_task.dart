@@ -17,10 +17,10 @@ TextEditingController titleController = TextEditingController();
 TextEditingController descriptionController = TextEditingController();
 FocusNode titleFocusNode = FocusNode();
 FocusNode descriptionFocusNode = FocusNode();
-bool taskModalValidation;
-int chosenTagModal;
-double taskModalHeightPercentage;
-Task oldTask;
+bool? taskModalValidation;
+int? chosenTagModal;
+late double taskModalHeightPercentage;
+late Task oldTask;
 
 // Initialize the 'UpdateDeleteTaskError' enum
 UpdateDeleteTaskError updateDeleteTaskError = UpdateDeleteTaskError.no;
@@ -58,10 +58,10 @@ Future<void> updateTask(BuildContext context) async {
         tag: Tag(
           title: chosenTagModal == null
               ? 'no_tag'
-              : localListAllTags[chosenTagModal].title,
+              : localListAllTags[chosenTagModal!].title,
           color: chosenTagModal == null
               ? 9
-              : localListAllTags[chosenTagModal].color,
+              : localListAllTags[chosenTagModal!].color,
         ),
         isDone: false,
       );
@@ -94,10 +94,10 @@ Future<void> deleteTask(BuildContext context, Task task) async {
 
 // Modal that is shown when the user long-taps any task
 void updateDeleteTask({
-  @required BuildContext context,
-  @required Function onTap,
-  @required Function deleteTask,
-  @required Task task,
+  required BuildContext context,
+  required Function onTap,
+  required Function deleteTask,
+  required Task task,
 }) {
   Size size = MediaQuery.of(context).size;
 
@@ -146,7 +146,7 @@ void updateDeleteTask({
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
-                      .headline1
+                      .headline1!
                       .copyWith(fontSize: 36.0),
                 ),
                 SizedBox(height: 24.0),
@@ -179,7 +179,7 @@ void updateDeleteTask({
                         title: localListAllTags[index].title,
                         backgroundColor: chosenTagModal == index
                             ? lightColor
-                            : tagColors[localListAllTags[index].color],
+                            : tagColors[localListAllTags[index].color!],
                         textColor:
                             chosenTagModal == index ? darkColor : lightColor,
                         onTap: () {

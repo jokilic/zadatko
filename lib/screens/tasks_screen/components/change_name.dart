@@ -52,7 +52,7 @@ void changeName(BuildContext context) {
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
-                    .headline1
+                    .headline1!
                     .copyWith(fontSize: 36.0),
               ),
               Padding(

@@ -14,9 +14,9 @@ import './color_picker.dart';
 
 TextEditingController titleController = TextEditingController();
 FocusNode titleFocusNode = FocusNode();
-double tagModalHeightPercentage;
-bool tagModalValidation;
-Tag oldTag;
+late double tagModalHeightPercentage;
+bool? tagModalValidation;
+late Tag oldTag;
 
 // Initialize the 'UpdateDeleteTagError' enum
 UpdateDeleteTagError updateDeleteTagError = UpdateDeleteTagError.no;
@@ -70,7 +70,7 @@ Future<void> deleteTag(BuildContext context, Tag tag) async {
   try {
     // If the tag is used in any task, throw error
     localListAllTasks.forEach((task) {
-      if (task.tag.title == tag.title) {
+      if (task.tag!.title == tag.title) {
         tagModalValidation = false;
         updateDeleteTagError = UpdateDeleteTagError.tagUsed;
         print(tagUsedErrorString);
@@ -91,10 +91,10 @@ Future<void> deleteTag(BuildContext context, Tag tag) async {
 
 // Modal that is shown when the user long-taps any tag
 void updateDeleteTag({
-  @required BuildContext context,
-  @required Function onTap,
-  @required Function deleteTag,
-  @required Tag tag,
+  required BuildContext context,
+  required Function onTap,
+  required Function deleteTag,
+  required Tag tag,
 }) {
   Size size = MediaQuery.of(context).size;
 
@@ -141,7 +141,7 @@ void updateDeleteTag({
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
-                      .headline1
+                      .headline1!
                       .copyWith(fontSize: 36.0),
                 ),
                 SizedBox(height: 24.0),

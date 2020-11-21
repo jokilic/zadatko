@@ -25,7 +25,7 @@ class Illustration extends StatelessWidget {
             illustrationText,
             textAlign: TextAlign.center,
             style:
-                Theme.of(context).textTheme.headline1.copyWith(fontSize: 28.0),
+                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 28.0),
           ),
         ],
       ),

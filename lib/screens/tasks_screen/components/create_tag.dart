@@ -13,11 +13,11 @@ import '../../../components/my_error_widget.dart';
 import '../../../models/tag.dart';
 import '../../../models/my_firestore.dart';
 
-double tagModalHeightPercentage;
-TextEditingController titleController;
-FocusNode titleFocusNode;
-bool tagModalValidation;
-CreateTagError createTagError;
+late double tagModalHeightPercentage;
+TextEditingController? titleController;
+FocusNode? titleFocusNode;
+bool? tagModalValidation;
+CreateTagError? createTagError;
 
 // Gets called when the user presses the 'Create tag' button
 Future<void> addTag(BuildContext context) async {
@@ -25,7 +25,7 @@ Future<void> addTag(BuildContext context) async {
     tagModalValidation = true;
 
     // Validation fails if the tag text is empty
-    if (titleController.text.isEmpty) {
+    if (titleController!.text.isEmpty) {
       tagModalValidation = false;
       tagModalHeightPercentage = 0.55;
       createTagError = CreateTagError.titleEmpty;
@@ -35,7 +35,7 @@ Future<void> addTag(BuildContext context) async {
 
     // Validation fails if the tag title is the same as any already created tag title
     localListAllTags.forEach((tag) {
-      if (titleController.text == tag.title) {
+      if (titleController!.text == tag.title) {
         tagModalValidation = false;
         tagModalHeightPercentage = 0.55;
         createTagError = CreateTagError.titleSame;
@@ -48,7 +48,7 @@ Future<void> addTag(BuildContext context) async {
     if (tagModalValidation == true) {
       await firestore.createTagFirebase(
         Tag(
-          title: titleController.text.trim(),
+          title: titleController!.text.trim(),
           color: chosenColor ?? 0,
         ),
       );
@@ -68,8 +68,8 @@ Future<void> addTag(BuildContext context) async {
 
 // Modal that is shown when the user taps the Tag icon
 void createTag({
-  @required BuildContext context,
-  @required Function onTap,
+  required BuildContext context,
+  required Function onTap,
 }) {
   myFirebaseError = MyFirebaseError.no;
   chosenColor = null;
@@ -114,7 +114,7 @@ void createTag({
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
-                      .headline1
+                      .headline1!
                       .copyWith(fontSize: 36.0),
                 ),
                 SizedBox(height: 24.0),

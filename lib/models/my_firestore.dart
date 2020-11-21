@@ -8,10 +8,10 @@ import '../constants/errors.dart';
 import '../constants/general.dart';
 import '../screens/tasks_screen/tasks_screen.dart';
 
-String uid;
-DocumentReference user;
-CollectionReference tasks;
-CollectionReference tags;
+late String uid;
+late DocumentReference user;
+late CollectionReference tasks;
+late CollectionReference tags;
 
 // Initialize the 'MyFirebaseError' enum
 MyFirebaseError myFirebaseError = MyFirebaseError.no;
@@ -59,10 +59,10 @@ class MyFirestore {
   ///////////////////////
   /// NAME
   ///////////////////////
-  Future<String> getNameFirebase() async {
+  Future<String?> getNameFirebase() async {
     try {
       final DocumentSnapshot name = await user.get();
-      String newName = name.data()['name'];
+      String? newName = name.data()['name'];
       return newName;
     } catch (e) {
       myFirebaseError = MyFirebaseError.getName;
@@ -72,7 +72,7 @@ class MyFirestore {
     }
   }
 
-  Future<void> updateNameFirebase(String name) async {
+  Future<void> updateNameFirebase(String? name) async {
     try {
       await user.set({
         'name': name,
@@ -126,8 +126,8 @@ class MyFirestore {
       'title': task.title,
       'description': task.description,
       'tag': {
-        'title': task.tag.title,
-        'color': task.tag.color,
+        'title': task.tag!.title,
+        'color': task.tag!.color,
       },
       'isDone': task.isDone,
     };
@@ -159,7 +159,7 @@ class MyFirestore {
 
   Future<void> deleteTaskFirebase(Task task) async {
     try {
-      await tasks.doc(task.title).delete();
+      await tasks.doc(task.title!).delete();
     } catch (e) {
       myFirebaseError = MyFirebaseError.deleteTask;
       print(firestoreDeletingTaskError);
@@ -170,7 +170,7 @@ class MyFirestore {
   Future<void> toggleIsDoneFirebase(Task task) async {
     // Update the 'isDone' property to the new value
     try {
-      await tasks.doc(task.title).update({
+      await tasks.doc(task.title!).update({
         'isDone': task.isDone,
       });
     } catch (e) {
@@ -210,7 +210,7 @@ class MyFirestore {
 
   Future<void> createTagFirebase(Tag tag) async {
     try {
-      await tags.doc(tag.title).set({
+      await tags.doc(tag.title!).set({
         'title': tag.title,
         'color': tag.color,
       });
@@ -237,7 +237,7 @@ class MyFirestore {
 
   Future<void> deleteTagFirebase(Tag tag) async {
     try {
-      await tags.doc(tag.title).delete();
+      await tags.doc(tag.title!).delete();
     } catch (e) {
       myFirebaseError = MyFirebaseError.deleteTag;
       print(firestoreDeletingTagError);

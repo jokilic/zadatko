@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 
 // Widget showing a tag in the TasksScreen
 class TagWidget extends StatelessWidget {
-  final String title;
+  final String? title;
   final Color backgroundColor;
   final Color textColor;
   final Function onTap;
-  final Function onLongPress;
+  final Function? onLongPress;
 
   TagWidget({
-    @required this.title,
-    @required this.backgroundColor,
-    @required this.textColor,
-    @required this.onTap,
-    @required this.onLongPress,
+    required this.title,
+    required this.backgroundColor,
+    required this.textColor,
+    required this.onTap,
+    required this.onLongPress,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
+      onTap: onTap as void Function()?,
+      onLongPress: onLongPress as void Function()?,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.0),
         padding: EdgeInsets.symmetric(
@@ -32,8 +32,8 @@ class TagWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
         ),
         child: Text(
-          title,
-          style: Theme.of(context).textTheme.bodyText1.copyWith(
+          title!,
+          style: Theme.of(context).textTheme.bodyText1!.copyWith(
                 fontSize: 18.0,
                 color: textColor,
               ),

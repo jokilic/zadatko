@@ -5,9 +5,9 @@ import '../../../constants/start_screen.dart';
 
 // Create buttons used in the StartScreen
 Widget buildStartButtons({
-  @required BuildContext context,
-  @required Function loginOnTap,
-  @required Function signupOnTap,
+  required BuildContext context,
+  required Function loginOnTap,
+  required Function signupOnTap,
 }) {
   return Container(
     child: Column(

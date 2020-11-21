@@ -22,19 +22,19 @@ class StartFields extends StatelessWidget {
   final Function passwordOnEditingComplete;
 
   StartFields({
-    @required this.titleText,
-    @required this.buttonText,
-    @required this.bottomText,
-    @required this.emailController,
-    @required this.passwordController,
-    @required this.buttonCallback,
-    @required this.bottomTextCallback,
-    @required this.errorText,
+    required this.titleText,
+    required this.buttonText,
+    required this.bottomText,
+    required this.emailController,
+    required this.passwordController,
+    required this.buttonCallback,
+    required this.bottomTextCallback,
+    required this.errorText,
     this.isLoading = false,
-    @required this.emailFocusNode,
-    @required this.passwordFocusNode,
-    @required this.emailOnEditingComplete,
-    @required this.passwordOnEditingComplete,
+    required this.emailFocusNode,
+    required this.passwordFocusNode,
+    required this.emailOnEditingComplete,
+    required this.passwordOnEditingComplete,
   });
 
   @override
@@ -47,7 +47,7 @@ class StartFields extends StatelessWidget {
             titleText,
             textAlign: TextAlign.center,
             style:
-                Theme.of(context).textTheme.headline1.copyWith(fontSize: 24.0),
+                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 24.0),
           ),
           SizedBox(height: 24.0),
           ZadatkoTextField(
@@ -73,7 +73,7 @@ class StartFields extends StatelessWidget {
             errorText,
             textAlign: TextAlign.center,
             style:
-                Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 20.0),
+                Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 20.0),
           ),
           SizedBox(height: 20.0),
           isLoading
@@ -92,15 +92,15 @@ class StartFields extends StatelessWidget {
                           bottomTextFirstString,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1
+                              .bodyText1!
                               .copyWith(fontSize: 18.0),
                         ),
                         GestureDetector(
-                          onTap: bottomTextCallback,
+                          onTap: bottomTextCallback as void Function()?,
                           child: Text(
                             bottomText,
                             style:
-                                Theme.of(context).textTheme.bodyText1.copyWith(
+                                Theme.of(context).textTheme.bodyText1!.copyWith(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -110,7 +110,7 @@ class StartFields extends StatelessWidget {
                           bottomTextSecondString,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1
+                              .bodyText1!
                               .copyWith(fontSize: 18.0),
                         ),
                       ],
