@@ -50,14 +50,14 @@ class InfoScreen extends StatelessWidget {
                   whatTitleString,
                   style: Theme.of(context)
                       .textTheme
-                      .headline1
+                      .headline1!
                       .copyWith(fontSize: 30.0),
                 ),
                 SizedBox(height: 24.0),
                 RichText(
                   text: TextSpan(
                     text: appName,
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           fontSize: 20.0,
                           fontWeight: FontWeight.w700,
                           color: tagColors[2],
@@ -67,12 +67,12 @@ class InfoScreen extends StatelessWidget {
                         text: whatFirstString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                       TextSpan(
                         text: whatSecondString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[0],
@@ -82,7 +82,7 @@ class InfoScreen extends StatelessWidget {
                         text: whatThirdString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                     ],
@@ -93,14 +93,14 @@ class InfoScreen extends StatelessWidget {
                   signupLoginTitleString,
                   style: Theme.of(context)
                       .textTheme
-                      .headline1
+                      .headline1!
                       .copyWith(fontSize: 28.0),
                 ),
                 SizedBox(height: 24.0),
                 RichText(
                   text: TextSpan(
                     text: signupLoginFirstString,
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           fontSize: 20.0,
                           fontWeight: FontWeight.w700,
                           color: tagColors[6],
@@ -110,12 +110,12 @@ class InfoScreen extends StatelessWidget {
                         text: signupLoginSecondString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                       TextSpan(
                         text: signupLoginThirdString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[3],
@@ -125,12 +125,12 @@ class InfoScreen extends StatelessWidget {
                         text: signupLoginFourthString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                       TextSpan(
                         text: signupLoginFifthString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[1],
@@ -140,12 +140,12 @@ class InfoScreen extends StatelessWidget {
                         text: signupLoginSixthString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                       TextSpan(
                         text: signupLoginSeventhString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[0],
@@ -155,7 +155,7 @@ class InfoScreen extends StatelessWidget {
                         text: signupLoginEigthString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                     ],
@@ -166,14 +166,14 @@ class InfoScreen extends StatelessWidget {
                   tagsTitleString,
                   style: Theme.of(context)
                       .textTheme
-                      .headline1
+                      .headline1!
                       .copyWith(fontSize: 28.0),
                 ),
                 SizedBox(height: 24.0),
                 RichText(
                   text: TextSpan(
                     text: tagsFirstString,
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           fontSize: 20.0,
                           fontWeight: FontWeight.w700,
                           color: tagColors[5],
@@ -183,12 +183,12 @@ class InfoScreen extends StatelessWidget {
                         text: tagsSecondString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                       TextSpan(
                         text: tagsThirdString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[2],
@@ -198,12 +198,12 @@ class InfoScreen extends StatelessWidget {
                         text: tagsFourthString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                       TextSpan(
                         text: tagsFifthString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[9],
@@ -213,7 +213,7 @@ class InfoScreen extends StatelessWidget {
                         text: tagsSixthString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                     ],
@@ -224,7 +224,7 @@ class InfoScreen extends StatelessWidget {
                   updateTitleString,
                   style: Theme.of(context)
                       .textTheme
-                      .headline1
+                      .headline1!
                       .copyWith(fontSize: 28.0),
                 ),
                 SizedBox(height: 24.0),
@@ -233,12 +233,12 @@ class InfoScreen extends StatelessWidget {
                     text: updateFirstString,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyText1!
                         .copyWith(fontSize: 20.0),
                     children: <TextSpan>[
                       TextSpan(
                         text: updateSecondString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[3],
@@ -248,7 +248,7 @@ class InfoScreen extends StatelessWidget {
                         text: updateThirdString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                     ],
@@ -259,7 +259,7 @@ class InfoScreen extends StatelessWidget {
                   deleteTitleString,
                   style: Theme.of(context)
                       .textTheme
-                      .headline1
+                      .headline1!
                       .copyWith(fontSize: 28.0),
                 ),
                 SizedBox(height: 24.0),
@@ -268,12 +268,12 @@ class InfoScreen extends StatelessWidget {
                     text: deleteFirstString,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyText1!
                         .copyWith(fontSize: 20.0),
                     children: <TextSpan>[
                       TextSpan(
                         text: deleteSecondString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[2],
@@ -283,12 +283,12 @@ class InfoScreen extends StatelessWidget {
                         text: deleteThirdString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                       TextSpan(
                         text: deleteFourthString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[1],
@@ -298,7 +298,7 @@ class InfoScreen extends StatelessWidget {
                         text: deleteFifthString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                     ],
@@ -309,7 +309,7 @@ class InfoScreen extends StatelessWidget {
                   signoutTitleString,
                   style: Theme.of(context)
                       .textTheme
-                      .headline1
+                      .headline1!
                       .copyWith(fontSize: 28.0),
                 ),
                 SizedBox(height: 24.0),
@@ -318,12 +318,12 @@ class InfoScreen extends StatelessWidget {
                     text: signoutFirstString,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyText1!
                         .copyWith(fontSize: 20.0),
                     children: <TextSpan>[
                       TextSpan(
                         text: signoutSecondString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[0],
@@ -333,12 +333,12 @@ class InfoScreen extends StatelessWidget {
                         text: signoutThirdString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                       TextSpan(
                         text: signoutFourthString,
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                               color: tagColors[9],
@@ -348,7 +348,7 @@ class InfoScreen extends StatelessWidget {
                         text: signoutFifthString,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(fontSize: 20.0),
                       ),
                     ],
@@ -376,7 +376,7 @@ class InfoScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline1
+                        .headline1!
                         .copyWith(fontSize: 26.0),
                   ),
                 ),

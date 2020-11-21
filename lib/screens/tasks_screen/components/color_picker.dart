@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
 
-int chosenColor;
+int? chosenColor;
 
 // Colors that are shown in the 'createTag' modal
 class ColorPicker extends StatefulWidget {

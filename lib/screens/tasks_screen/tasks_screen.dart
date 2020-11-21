@@ -20,9 +20,9 @@ import '../../components/illustration.dart';
 import '../../models/my_firestore.dart';
 import '../info_screen/info_screen.dart';
 
-int chosenTagMainScreen;
+int? chosenTagMainScreen;
 MyFirestore firestore = MyFirestore();
-String chosenName;
+String? chosenName;
 
 // Set to true if there's no name set for the user
 bool firstStart = false;
@@ -79,18 +79,18 @@ class _TasksScreenState extends State<TasksScreen> {
 
   // Trims the text in order not to overflow the screen
   String createShortText({
-    int index,
-    ShortText shortText,
-    int numberOfCharacters,
+    int? index,
+    ShortText? shortText,
+    required int numberOfCharacters,
   }) {
-    String currentText;
+    String? currentText;
     if (shortText == ShortText.title)
-      currentText = localListFilteredTasks[index].title;
+      currentText = localListFilteredTasks[index!].title;
     else
-      currentText = localListFilteredTasks[index].description;
+      currentText = localListFilteredTasks[index!].description;
 
     // Replace all new lines with spaces
-    currentText = currentText.replaceAll('\n', ' ');
+    currentText = currentText!.replaceAll('\n', ' ');
 
     if (currentText.length > numberOfCharacters)
       return '${currentText.substring(0, numberOfCharacters)}...';
@@ -113,7 +113,7 @@ class _TasksScreenState extends State<TasksScreen> {
       localListFilteredTasks = localListAllTasks
           .where(
             (task) =>
-                task.tag.title == localListAllTags[chosenTagMainScreen].title,
+                task.tag!.title == localListAllTags[chosenTagMainScreen!].title,
           )
           .toList();
   }
@@ -222,12 +222,12 @@ class _TasksScreenState extends State<TasksScreen> {
             '$helloString $chosenName',
             textAlign: TextAlign.center,
             style:
-                Theme.of(context).textTheme.headline1.copyWith(fontSize: 36.0),
+                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 36.0),
           ),
         ),
         Text(
           '$numberOfTasksFirstString ${localListFilteredTasks.length} $numberOfTasksSecondString',
-          style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 28.0),
+          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 28.0),
         ),
         SizedBox(height: 36.0),
 
@@ -248,7 +248,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   title: localListAllTags[index].title,
                   backgroundColor: chosenTagMainScreen == index
                       ? lightColor
-                      : tagColors[localListAllTags[index].color],
+                      : tagColors[localListAllTags[index].color!],
                   textColor:
                       chosenTagMainScreen == index ? darkColor : lightColor,
                   onTap: () => filterTasks(index),
@@ -305,12 +305,12 @@ class _TasksScreenState extends State<TasksScreen> {
                       shortText: ShortText.description,
                       numberOfCharacters: 50,
                     ),
-                    color: tagColors[localListFilteredTasks[index].tag.color],
+                    color: tagColors[localListFilteredTasks[index].tag!.color!],
                     onTap: () {
                       setState(() {
                         // Toggle the 'isDone' state of the tapped task
                         localListFilteredTasks[index].isDone =
-                            !localListFilteredTasks[index].isDone;
+                            !localListFilteredTasks[index].isDone!;
                       });
 
                       // Toggle 'isDone' in Firebase
@@ -332,7 +332,7 @@ class _TasksScreenState extends State<TasksScreen> {
                       },
                       task: localListFilteredTasks[index],
                     ),
-                    icon: localListFilteredTasks[index].isDone
+                    icon: localListFilteredTasks[index].isDone!
                         ? checkboxCheckedIcon
                         : checkboxUncheckedIcon,
                   ),

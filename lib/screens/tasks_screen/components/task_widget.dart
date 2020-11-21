@@ -13,12 +13,12 @@ class TaskWidget extends StatelessWidget {
   final String icon;
 
   TaskWidget({
-    @required this.title,
-    @required this.description,
-    @required this.color,
-    @required this.onTap,
-    @required this.onLongPress,
-    @required this.icon,
+    required this.title,
+    required this.description,
+    required this.color,
+    required this.onTap,
+    required this.onLongPress,
+    required this.icon,
   });
 
   @override
@@ -26,8 +26,8 @@ class TaskWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
+      onTap: onTap as void Function()?,
+      onLongPress: onLongPress as void Function()?,
       child: Container(
         margin: EdgeInsets.symmetric(
           horizontal: 16.0,
@@ -62,13 +62,13 @@ class TaskWidget extends StatelessWidget {
                     title,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyText1!
                         .copyWith(fontSize: 20.0),
                   ),
                   SizedBox(height: 4.0),
                   Text(
                     description,
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           fontSize: 16.0,
                           color: lightColor.withOpacity(0.6),
                         ),

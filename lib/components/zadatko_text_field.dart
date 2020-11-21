@@ -6,19 +6,19 @@ import '../constants/colors.dart';
 class ZadatkoTextField extends StatelessWidget {
   final String hintText;
   final bool isObscureText;
-  final TextEditingController textEditingController;
-  final FocusNode focusNode;
-  final Function onEditingComplete;
-  final int maxLines;
+  final TextEditingController? textEditingController;
+  final FocusNode? focusNode;
+  final Function? onEditingComplete;
+  final int? maxLines;
   final TextCapitalization textCapitalization;
   final TextInputType textInputType;
 
   ZadatkoTextField({
-    @required this.hintText,
+    required this.hintText,
     this.isObscureText = false,
-    @required this.textEditingController,
-    @required this.focusNode,
-    @required this.onEditingComplete,
+    required this.textEditingController,
+    required this.focusNode,
+    required this.onEditingComplete,
     this.maxLines = 1,
     this.textCapitalization = TextCapitalization.sentences,
     this.textInputType = TextInputType.text,
@@ -39,7 +39,7 @@ class ZadatkoTextField extends StatelessWidget {
             controller: textEditingController,
             obscureText: isObscureText,
             focusNode: focusNode,
-            onEditingComplete: onEditingComplete,
+            onEditingComplete: onEditingComplete as void Function()?,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: lightColor,

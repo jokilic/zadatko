@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../constants/enums.dart';
 import '../constants/errors.dart';
 
-LoginState loginState;
-SignupState signupState;
+LoginState? loginState;
+SignupState? signupState;
 
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 

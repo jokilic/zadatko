@@ -1,6 +1,6 @@
 class Tag {
-  final String title;
-  final int color;
+  final String? title;
+  final int? color;
 
   Tag({
     this.title,
