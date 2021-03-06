@@ -62,7 +62,7 @@ class MyFirestore {
   Future<String?> getNameFirebase() async {
     try {
       final DocumentSnapshot name = await user.get();
-      String? newName = name.data()!['name'];
+      String newName = name.data()!['name'];
       return newName;
     } catch (e) {
       myFirebaseError = MyFirebaseError.getName;

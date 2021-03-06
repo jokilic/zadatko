@@ -227,7 +227,8 @@ class _TasksScreenState extends State<TasksScreen> {
         ),
         Text(
           '$numberOfTasksFirstString ${localListFilteredTasks.length} $numberOfTasksSecondString',
-          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 28.0),
+          style:
+              Theme.of(context).textTheme.headline1!.copyWith(fontSize: 28.0),
         ),
         SizedBox(height: 36.0),
 
