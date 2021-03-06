@@ -27,7 +27,7 @@ class LoadingScreen extends StatelessWidget {
 
         // Return a StreamBuilder if the Firebase app initializes
         if (snapshot.connectionState == ConnectionState.done) {
-          return StreamBuilder<User>(
+          return StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
                 // Show TasksScreen if the user is logged in

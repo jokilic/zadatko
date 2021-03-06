@@ -103,7 +103,7 @@ void updateDeleteTag({
   // Save original tag
   oldTag = tag;
 
-  titleController.text = tag.title;
+  titleController.text = tag.title!;
   titleFocusNode = FocusNode();
   tagModalHeightPercentage = 0.45;
   tagModalValidation = true;

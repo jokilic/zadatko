@@ -26,7 +26,7 @@ class MyFirestore {
       final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
       // Get the ID of the current user
-      uid = auth.currentUser.uid;
+      uid = auth.currentUser!.uid;
       // Get User Document
       user = firestoreInstance.collection('users').doc(uid);
       // Get Tasks Collection
@@ -62,7 +62,7 @@ class MyFirestore {
   Future<String?> getNameFirebase() async {
     try {
       final DocumentSnapshot name = await user.get();
-      String? newName = name.data()['name'];
+      String? newName = name.data()!['name'];
       return newName;
     } catch (e) {
       myFirebaseError = MyFirebaseError.getName;
@@ -99,13 +99,13 @@ class MyFirestore {
         (task) {
           localListAllTasks.add(
             Task(
-              title: task.data()['title'],
-              description: task.data()['description'],
+              title: task.data()!['title'],
+              description: task.data()!['description'],
               tag: Tag(
-                title: task.data()['tag']['title'],
-                color: task.data()['tag']['color'],
+                title: task.data()!['tag']['title'],
+                color: task.data()!['tag']['color'],
               ),
-              isDone: task.data()['isDone'],
+              isDone: task.data()!['isDone'],
             ),
           );
         },
@@ -195,8 +195,8 @@ class MyFirestore {
         (tag) {
           localListAllTags.add(
             Tag(
-              title: tag.data()['title'],
-              color: tag.data()['color'],
+              title: tag.data()!['title'],
+              color: tag.data()!['color'],
             ),
           );
         },

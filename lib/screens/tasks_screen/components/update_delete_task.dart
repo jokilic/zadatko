@@ -106,8 +106,8 @@ void updateDeleteTask({
   // Save original task
   oldTask = task;
 
-  titleController.text = task.title;
-  descriptionController.text = task.description;
+  titleController.text = task.title!;
+  descriptionController.text = task.description!;
   titleFocusNode = FocusNode();
   descriptionFocusNode = FocusNode();
   taskModalHeightPercentage = 0.5;
