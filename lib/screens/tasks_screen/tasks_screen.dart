@@ -295,48 +295,104 @@ class _TasksScreenState extends State<TasksScreen> {
                 ListView.builder(
                   physics: BouncingScrollPhysics(),
                   itemCount: localListFilteredTasks.length,
-                  itemBuilder: (context, index) => TaskWidget(
-                    title: createShortText(
-                      index: index,
-                      shortText: ShortText.title,
-                      numberOfCharacters: 25,
-                    ),
-                    description: createShortText(
-                      index: index,
-                      shortText: ShortText.description,
-                      numberOfCharacters: 50,
-                    ),
-                    color: tagColors[localListFilteredTasks[index].tag!.color!],
-                    onTap: () {
-                      setState(() {
-                        // Toggle the 'isDone' state of the tapped task
-                        localListFilteredTasks[index].isDone =
-                            !localListFilteredTasks[index].isDone!;
-                      });
+                  itemBuilder: (context, index) {
+                    // Add some spacing on the bottom if it's the last task
+                    if (index == localListFilteredTasks.length - 1)
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TaskWidget(
+                            title: createShortText(
+                              index: index,
+                              shortText: ShortText.title,
+                              numberOfCharacters: 25,
+                            ),
+                            description: createShortText(
+                              index: index,
+                              shortText: ShortText.description,
+                              numberOfCharacters: 50,
+                            ),
+                            color: tagColors[
+                                localListFilteredTasks[index].tag!.color!],
+                            onTap: () {
+                              setState(() {
+                                // Toggle the 'isDone' state of the tapped task
+                                localListFilteredTasks[index].isDone =
+                                    !localListFilteredTasks[index].isDone!;
+                              });
 
-                      // Toggle 'isDone' in Firebase
-                      firestore
-                          .toggleIsDoneFirebase(localListFilteredTasks[index]);
-                    },
-                    onLongPress: () => updateDeleteTask(
-                      context: context,
-                      onTap: () async {
-                        await updateTask(context);
-                        setState(() {});
+                              // Toggle 'isDone' in Firebase
+                              firestore.toggleIsDoneFirebase(
+                                  localListFilteredTasks[index]);
+                            },
+                            onLongPress: () => updateDeleteTask(
+                              context: context,
+                              onTap: () async {
+                                await updateTask(context);
+                                setState(() {});
+                              },
+                              deleteTask: () async {
+                                await deleteTask(
+                                  context,
+                                  localListFilteredTasks[index],
+                                );
+                                setState(() {});
+                              },
+                              task: localListFilteredTasks[index],
+                            ),
+                            icon: localListFilteredTasks[index].isDone!
+                                ? checkboxCheckedIcon
+                                : checkboxUncheckedIcon,
+                          ),
+                          SizedBox(height: 50.0),
+                        ],
+                      );
+
+                    // Return standard task Widget
+                    return TaskWidget(
+                      title: createShortText(
+                        index: index,
+                        shortText: ShortText.title,
+                        numberOfCharacters: 25,
+                      ),
+                      description: createShortText(
+                        index: index,
+                        shortText: ShortText.description,
+                        numberOfCharacters: 50,
+                      ),
+                      color:
+                          tagColors[localListFilteredTasks[index].tag!.color!],
+                      onTap: () {
+                        setState(() {
+                          // Toggle the 'isDone' state of the tapped task
+                          localListFilteredTasks[index].isDone =
+                              !localListFilteredTasks[index].isDone!;
+                        });
+
+                        // Toggle 'isDone' in Firebase
+                        firestore.toggleIsDoneFirebase(
+                            localListFilteredTasks[index]);
                       },
-                      deleteTask: () async {
-                        await deleteTask(
-                          context,
-                          localListFilteredTasks[index],
-                        );
-                        setState(() {});
-                      },
-                      task: localListFilteredTasks[index],
-                    ),
-                    icon: localListFilteredTasks[index].isDone!
-                        ? checkboxCheckedIcon
-                        : checkboxUncheckedIcon,
-                  ),
+                      onLongPress: () => updateDeleteTask(
+                        context: context,
+                        onTap: () async {
+                          await updateTask(context);
+                          setState(() {});
+                        },
+                        deleteTask: () async {
+                          await deleteTask(
+                            context,
+                            localListFilteredTasks[index],
+                          );
+                          setState(() {});
+                        },
+                        task: localListFilteredTasks[index],
+                      ),
+                      icon: localListFilteredTasks[index].isDone!
+                          ? checkboxCheckedIcon
+                          : checkboxUncheckedIcon,
+                    );
+                  },
                 ),
 
               ///////////////////////

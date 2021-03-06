@@ -3,7 +3,7 @@ description: Zadatko is a simple task management application made in Flutter & F
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: '>=2.12.0-29.10.beta <3.0.0'
@@ -50,4 +50,3 @@ flutter:
         - asset: assets/fonts/Playfair Display/PlayfairDisplay-Regular.ttf
         - asset: assets/fonts/Playfair Display/PlayfairDisplay-SemiBold.ttf
           weight: 600
-
