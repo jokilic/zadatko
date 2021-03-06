@@ -56,33 +56,21 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.0.0"
-=======
-    version: "0.14.4"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "4.0.0"
-=======
-    version: "2.2.1"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.0.0"
-=======
-    version: "0.2.1+2"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   collection:
     dependency: transitive
     description:
@@ -110,77 +98,49 @@ packages:
       name: fake_async
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.2.0"
-=======
-    version: "1.2.0-nullsafety.1"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   firebase_auth:
     dependency: "direct main"
     description:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.0.0"
-=======
-    version: "0.18.4"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "4.0.0"
-=======
-    version: "2.1.4"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.0.0"
-=======
-    version: "0.3.2+2"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   firebase_core:
     dependency: "direct main"
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.0.0"
-=======
-    version: "0.5.3"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   firebase_core_platform_interface:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "4.0.0"
-=======
-    version: "2.1.0"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   firebase_core_web:
     dependency: transitive
     description:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.0.0"
-=======
-    version: "0.2.1+1"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   flutter:
     dependency: "direct main"
     description: flutter
@@ -206,11 +166,7 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.21.0-nullsafety.0"
-=======
-    version: "0.19.1"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -283,11 +239,7 @@ packages:
       name: path_parsing
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.2.0-nullsafety.0"
-=======
-    version: "0.1.4"
->>>>>>> 88b6bfe96ac00003d6b5d6e368c82612bf0d7422
   petitparser:
     dependency: transitive
     description:

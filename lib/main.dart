@@ -11,7 +11,6 @@ class Zadatko extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: appName,
       theme: theme(),
       initialRoute: LoadingScreen.routeName,
