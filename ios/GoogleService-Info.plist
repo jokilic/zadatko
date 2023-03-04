@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>972613918388-te1onm9m87uqhacn9vjtpqpqegvc10k8.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.972613918388-te1onm9m87uqhacn9vjtpqpqegvc10k8</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBNE7SSrreqK-9yM9JavcxDxawhMCVjmcw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>972613918388</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.josipkilic.zadatko</string>
+	<key>PROJECT_ID</key>
+	<string>zadatko</string>
+	<key>STORAGE_BUCKET</key>
+	<string>zadatko.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:972613918388:ios:456d6a354ef1faea2581e1</string>
+	<key>DATABASE_URL</key>
+	<string>https://zadatko.firebaseio.com</string>
+</dict>
+</plist>
