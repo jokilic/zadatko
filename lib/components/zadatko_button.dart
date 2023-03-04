@@ -16,23 +16,25 @@ class ZadatkoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      padding: EdgeInsets.symmetric(
-        horizontal: 36.0,
-        vertical: 20.0,
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.symmetric(
+          horizontal: 36.0,
+          vertical: 20.0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          side: BorderSide(
+            color: color,
+            width: 3,
+          ),
+        ),
       ),
       child: Text(
         text.toUpperCase(),
         style: Theme.of(context).textTheme.button!.copyWith(color: color),
       ),
       onPressed: onTap as void Function()?,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        side: BorderSide(
-          color: color,
-          width: 3,
-        ),
-      ),
     );
   }
 }
