@@ -62,7 +62,7 @@ class MyFirestore {
   Future<String?> getNameFirebase() async {
     try {
       final DocumentSnapshot name = await user.get();
-      String newName = name.data()!['name'];
+      String newName = name.get('name');
       return newName;
     } catch (e) {
       myFirebaseError = MyFirebaseError.getName;
@@ -99,13 +99,13 @@ class MyFirestore {
         (task) {
           localListAllTasks.add(
             Task(
-              title: task.data()!['title'],
-              description: task.data()!['description'],
+              title: task.get('title'),
+              description: task.get('description'),
               tag: Tag(
-                title: task.data()!['tag']['title'],
-                color: task.data()!['tag']['color'],
+                title: task.get('tag')['title'],
+                color: task.get('tag')['color'],
               ),
-              isDone: task.data()!['isDone'],
+              isDone: task.get('isDone'),
             ),
           );
         },
@@ -195,8 +195,8 @@ class MyFirestore {
         (tag) {
           localListAllTags.add(
             Tag(
-              title: tag.data()!['title'],
-              color: tag.data()!['color'],
+              title: tag.get('title'),
+              color: tag.get('color'),
             ),
           );
         },
